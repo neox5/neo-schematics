@@ -1,0 +1,9 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "neo-component": {
+      "description": "Creating neo component",
+      "factory": "./neo-component/index#neoComponent"
+    }
+  }
+}

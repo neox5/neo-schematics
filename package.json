@@ -1,0 +1,38 @@
+{
+  "name": "@neox/schematics",
+  "version": "0.0.0",
+  "description": "Angular schematics for faster and scalable code generation",
+  "author": "Christian Faustmann <faustmannchr@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/neox5/neo-schematics",
+  "schematics": "./src/collection.json",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch",
+    "test": "npm run build && jest src/**/*_spec.js",
+    "clean": "find src -type f \\( -name \"*.js\" -or -name \"*.js.map\" -or -name \"*.d.ts\" \\) -exec rm {} +"
+  },
+  "keywords": [
+    "angular",
+    "Angular CLI",
+    "code generation",
+    "devkit",
+    "schematics",
+    "scalable",
+    "neox"
+  ],
+  "dependencies": {
+    "@angular-devkit/core": "^11.2.10",
+    "@angular-devkit/schematics": "^11.2.10",
+    "typescript": "~4.1.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.22",
+    "@types/node": "^12.11.1",
+    "jest": "^26.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neox5/neo-schematics.git"
+  }
+}
