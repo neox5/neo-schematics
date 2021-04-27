@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "neo-schematics://component",
+  "title": "Neo Component Options Schema",
+  "type": "object",
+  "description": "Creates a component with structural comments",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the component",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the component?"
+    },
+    "type": {
+      "type": "string",
+      "description": "The component type",
+      "default": "component",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
+      "enum": ["view", "container", "component"],
+      "x-prompt": {
+        "message": "Which type of component would you like to use?",
+        "type": "list",
+        "items": [
+          { "value": "view",  "label": "View - hosts containers & components" },
+          { "value": "container", "label": "Container - responsible for state management and data flow" },
+          { "value": "component", "label": "Component - responsible for presentiation" }
+        ]
+      }
+    },
+    "sandboxName": {
+      "type": "string",
+      "description": "Name of the module sandbox",
+      "$default": {
+        "$source": "argv",
+        "index": 2
+      }
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "destroyable": {
+      "type": "boolean",
+      "description": "Adds destroyed subject and ngDestroyed lifecycle hook",
+      "default": false,
+      "x-prompt": "Add destroyed subject and ngDestroyed lifecycle hook?"
+    },
+    "template": {
+      "type": "string",
+      "description": "Adds inlineTemplate string"
+    }
+  }
+}

@@ -1,13 +1,10 @@
-import { ProjectDefinition } from "@angular-devkit/core/src/workspace";
-import { SchematicsException, Tree } from "@angular-devkit/schematics";
-import { getWorkspace } from "./workspace";
+import { ProjectDefinition, WorkspaceDefinition } from "@angular-devkit/core/src/workspace";
+import { SchematicsException } from "@angular-devkit/schematics";
 
-export async function getProject(
-  tree: Tree,
+export function getProject(
+  workspace: WorkspaceDefinition,
   projectName: string
-): Promise<ProjectDefinition> {
-  const workspace = await getWorkspace(tree);
-
+): ProjectDefinition {
   if (!projectName) {
     throw new SchematicsException("Project is not defined in this workspace.");
   }
@@ -22,7 +19,6 @@ export async function getProject(
   return project;
 }
 
-export async function getDefaultProjectName(tree: Tree): Promise<string> {
-  const workspace = await getWorkspace(tree);
+export function getDefaultProjectName(workspace: WorkspaceDefinition): string {
   return workspace.extensions["defaultProject"] as string;
 }

@@ -8,13 +8,15 @@ import {
   Tree,
   url,
 } from "@angular-devkit/schematics";
+import { getWorkspace } from "../utils";
 import { getProject } from "../utils/project";
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
 export function debug(options: any): Rule {
   return async (tree: Tree) => {
-    const project = await getProject(tree, options.project);
+    const workspace = await getWorkspace(tree);
+    const project = await getProject(workspace, options.project);
 
     const projectPath = project.sourceRoot as string;
     console.log(projectPath + "/.npmrc");

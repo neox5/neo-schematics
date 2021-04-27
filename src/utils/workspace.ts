@@ -1,6 +1,11 @@
 import { SchematicsException, Tree } from "@angular-devkit/schematics";
 import { virtualFs, workspaces } from "@angular-devkit/core";
 
+export enum ProjectType {
+  Application = "application",
+  Library = "library",
+}
+
 function createHost(tree: Tree): workspaces.WorkspaceHost {
   return {
     async readFile(path: string): Promise<string> {
@@ -30,4 +35,18 @@ export async function getWorkspace(
   const { workspace } = await workspaces.readWorkspace(path, host);
 
   return workspace;
+}
+
+export function buildDefaultPath(
+  project: workspaces.ProjectDefinition
+): string {
+  const root = project.sourceRoot
+    ? `/${project.sourceRoot}/`
+    : `/${project.root}/src/`;
+  const projectDirName =
+    project.extensions["projectType"] === ProjectType.Application
+      ? "app"
+      : "lib";
+
+  return `${root}${projectDirName}`;
 }

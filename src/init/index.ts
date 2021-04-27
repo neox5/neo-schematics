@@ -6,16 +6,17 @@ import {
 } from "@angular-devkit/schematics";
 
 import { Schema as InitOptions } from "./schema.interface";
-import { getJson, getDefaultProjectName } from "../utils";
+import { getJson, getDefaultProjectName, getWorkspace } from "../utils";
 
 export default function (options: InitOptions): Rule {
   return async (tree: Tree, _context: SchematicContext) => {
+    const workspace = await getWorkspace(tree);
     const angularJson = getJson(tree, "angular.json");
     // const tslint = getJson(tree, "tslint.json");
     // const tsconfig = getJson(tree, "tsconfig.json");
     // const packageJson = getJson(tree, "package.json");
 
-    let projectName = await getDefaultProjectName(tree);
+    let projectName = getDefaultProjectName(workspace);
     if (options.project) {
       projectName = options.project;
     }
