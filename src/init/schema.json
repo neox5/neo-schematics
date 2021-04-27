@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "neo-schematics://init",
+  "title": "Neo Init",
+  "description": "Initialize angular application for neo structure",
+  "additionalProperties": false,
+  "properties": {
+    "inlineTemplate": {
+      "description": "Include template inline in the component.ts file. By default, an external template file is created and referenced in the component.ts file.",
+      "type": "boolean",
+      "default": true,
+      "alias": "t",
+      "x-prompt": "Using inline templates for components?"
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project. If not defined defaultProject gets used.",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  }
+}

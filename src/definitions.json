@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "neo-schematics://definitions.json",
+  "definitions": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project to build. Can be an application or a library.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "help": {
+          "enum": [
+            true,
+            false,
+            "json",
+            "JSON"
+          ],
+          "description": "Shows a help message for this command in the console.",
+          "default": false,
+          "x-prompt": "Do you need help?"
+        }
+      }
+    }
+  }
+}
