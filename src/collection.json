@@ -18,6 +18,12 @@
       "description": "Initializes project.",
       "factory": "./init",
       "schema": "./init/schema.json"
+    },
+    "neo-module": {
+      "aliases": ["nm"],
+      "description": "A blank schematic.",
+      "factory": "./module/index",
+      "schema": "./module/schema.json"
     }
   }
 }

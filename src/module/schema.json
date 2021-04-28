@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "neo-schematics://module",
+  "title": "Neo Module Options Schema",
+  "type": "object",
+  "description": "Creates a module with structural comments",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the module",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the module?"
+    },
+    "type": {
+      "type": "string",
+      "default": "",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
+      "enum": ["", "core", "layout", "routes", "shared"],
+      "x-prompt": {
+        "message": "Which type of module would you like to use?",
+        "type": "list",
+        "items": [
+          { "value": "",  "label": "Default Module" },
+          { "value": "core", "label": "Core Module" },
+          { "value": "layout", "label": "Layout Module" },
+          { "value": "routes", "label": "Routes Module" },
+          { "value": "shared", "label": "Shared Module" }
+        ]
+      }
+    },
+    "project": {
+      "type": "string",
+      "description": "Generate in specific Angular CLI workspace project",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  },
+  "required": ["name"]
+}

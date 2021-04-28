@@ -16,7 +16,7 @@
       },
       "root": "projects/app-one",
       "sourceRoot": "projects/app-one/src",
-      "prefix": "test",
+      "prefix": "ao",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -31,9 +31,7 @@
               "projects/app-one/src/favicon.ico",
               "projects/app-one/src/assets"
             ],
-            "styles": [
-              "projects/app-one/src/styles.scss"
-            ],
+            "styles": ["projects/app-one/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -94,9 +92,7 @@
               "projects/app-one/src/favicon.ico",
               "projects/app-one/src/assets"
             ],
-            "styles": [
-              "projects/app-one/src/styles.scss"
-            ],
+            "styles": ["projects/app-one/src/styles.scss"],
             "scripts": []
           }
         },
@@ -108,9 +104,7 @@
               "projects/app-one/tsconfig.spec.json",
               "projects/app-one/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
