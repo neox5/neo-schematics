@@ -8,11 +8,17 @@ import {
   SchematicsException,
   template,
   Tree,
+  UpdateRecorder,
   url,
 } from "@angular-devkit/schematics";
 import { tsquery } from "@phenomnomnominal/tsquery";
-import { insertImport } from "@schematics/angular/utility/ast-utils";
-import { InsertChange } from "@schematics/angular/utility/change";
+import {
+  Change,
+  InsertChange,
+  NoopChange,
+  RemoveChange,
+  ReplaceChange,
+} from "@schematics/angular/utility/change";
 
 import { Schema as ComponentOptions } from "./schema.interface";
 
@@ -53,13 +59,13 @@ export default function (options: ComponentOptions): Rule {
       move(parsedPath.path),
     ]);
 
-    addImportToIndex(tree, options);
+    udpateIndexFile(tree, options);
 
     return chain([mergeWith(sourceParametrizedTemplates)]);
   };
 }
 
-function addImportToIndex(tree: Tree, options: ComponentOptions){
+function udpateIndexFile(tree: Tree, options: ComponentOptions) {
   if (options.skipImport) {
     return;
   }
@@ -72,46 +78,21 @@ function addImportToIndex(tree: Tree, options: ComponentOptions){
     );
   }
 
-  const symbolName = `{ ${strings.classify(options.name)}Component }`;
-  const fileName = `./${strings.dasherize(options.name)}/${strings.dasherize(options.name)}.component`;
-  // const importStr =
-  //   `import { ${strings.classify(options.name)}Component } ` +
-  //   "from " +
-  //   `"./${strings.dasherize(options.name)}/${strings.dasherize(options.name)}.component";\n`;
+  const componentName = `${strings.classify(options.name)}Component`;
+  const componentFilePath = `./${strings.dasherize(
+    options.name
+  )}/${strings.dasherize(options.name)}.component`;
 
-  let recorder = tree.beginUpdate(indexPath);
-  let sourceFile = readIntoSourceFile(tree, indexPath) 
-  let change = insertImport(sourceFile, indexPath, symbolName, fileName, true)
-  if (change instanceof InsertChange) {
-    recorder.insertRight(change.pos, change.toAdd)
-  }
-  tree.commitUpdate(recorder);
+  addImport(tree, indexPath, componentName, componentFilePath);
 
-  // add Component to export array
-  sourceFile = readIntoSourceFile(tree, indexPath);
-  let importStr = strings.classify(options.name) + "Component";
-  const identifierCount = tsquery(
-    sourceFile,
-    "ArrayLiteralExpression > Identifier"
-  ).length;
-  const pos = tsquery(sourceFile, "ArrayLiteralExpression")[0].getEnd();
+  addToExportArray(tree, indexPath, componentName);
 
-  if (identifierCount !== 0) {
-    importStr = ", " + importStr;
+  if (options.type == "view") {
+    addExport(tree, indexPath, componentFilePath);
   }
-  
-  recorder = tree.beginUpdate(indexPath);
-  change = new InsertChange(indexPath, pos - 1, importStr);
-  if (change instanceof InsertChange) {
-    recorder.insertLeft(change.pos, change.toAdd);
-  }
-  tree.commitUpdate(recorder);
 }
 
-function findIndexFromOptions(
-  tree: Tree,
-  path?: string
-): string | undefined {
+function findIndexFromOptions(tree: Tree, path?: string): string | undefined {
   if (!path) {
     return undefined;
   }
@@ -119,4 +100,93 @@ function findIndexFromOptions(
   path = join(path as Path, "index.ts");
 
   return tree.exists(path) ? path : undefined;
+}
+
+function addImport(
+  tree: Tree,
+  indexPath: string,
+  componentName: string,
+  componentFilePath: string
+): void {
+  const sourceFile = readIntoSourceFile(tree, indexPath);
+
+  const importNodes = tsquery(sourceFile, "ImportDeclaration > StringLiteral");
+
+  const isBeginning = importNodes.length == 0;
+
+  let pos = 0;
+  if (!isBeginning) {
+    pos = importNodes[importNodes.length - 1].getEnd();
+  }
+  const separator = isBeginning ? "" : ";\n";
+  const lineEnd = isBeginning ? ";\n\n" : "";
+  const toInsert = `${separator}import { ${componentName} } from "${componentFilePath}"${lineEnd}`;
+
+  const recorder = tree.beginUpdate(indexPath);
+  const change = new InsertChange(indexPath, pos, toInsert);
+  // if (change instanceof InsertChange) {
+  //   recorder.insertRight(change.pos, change.toAdd)
+  // }
+  applyToUpdateRecorder(recorder, [change]);
+  tree.commitUpdate(recorder);
+}
+
+function addToExportArray(
+  tree: Tree,
+  indexPath: string,
+  componentName: string
+): void {
+  const sourceFile = readIntoSourceFile(tree, indexPath);
+  // https://ts-ast-viewer.com
+  const identifierCount = tsquery(
+    sourceFile,
+    "ArrayLiteralExpression > Identifier"
+  ).length;
+  const pos = tsquery(sourceFile, "ArrayLiteralExpression")[0].getEnd();
+
+  if (identifierCount !== 0) {
+    componentName = ", " + componentName;
+  }
+
+  const recorder = tree.beginUpdate(indexPath);
+  const change = new InsertChange(indexPath, pos - 1, componentName);
+  applyToUpdateRecorder(recorder, [change]);
+  tree.commitUpdate(recorder);
+}
+
+function addExport(
+  tree: Tree,
+  indexPath: string,
+  exportFilePath: string
+): void {
+  const sourceFile = readIntoSourceFile(tree, indexPath);
+  const isFirst = tsquery(sourceFile, "ExportDeclaration").length == 0;
+  const separator = isFirst ? "\n" : "";
+  const toInsert = `${separator}export * from "${exportFilePath}";\n`;
+  const endOfFilePos = tsquery(sourceFile, "EndOfFileToken")[0].getStart();
+
+  const recorder = tree.beginUpdate(indexPath);
+  const change = new InsertChange(indexPath, endOfFilePos, toInsert);
+  applyToUpdateRecorder(recorder, [change]);
+  tree.commitUpdate(recorder);
+}
+
+function applyToUpdateRecorder(
+  recorder: UpdateRecorder,
+  changes: Change[]
+): void {
+  for (const change of changes) {
+    if (change instanceof InsertChange) {
+      recorder.insertLeft(change.pos, change.toAdd);
+    } else if (change instanceof RemoveChange) {
+      recorder.remove(change.order, change.toRemove.length);
+    } else if (change instanceof ReplaceChange) {
+      recorder.remove(change.order, change.oldText.length);
+      recorder.insertLeft(change.order, change.newText);
+    } else if (!(change instanceof NoopChange)) {
+      throw new Error(
+        "Unknown Change type encountered when updating a recorder."
+      );
+    }
+  }
 }

@@ -8,5 +8,6 @@ export function getJson(tree: Tree, jsonPath: string): any {
   }
 
   const json = jsonBuffer.toString();
+  
   return JSON.parse(stripJsonComments(json));
 }
