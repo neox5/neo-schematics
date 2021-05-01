@@ -4,6 +4,7 @@ import {
   chain,
   mergeWith,
   move,
+  noop,
   Rule,
   SchematicsException,
   template,
@@ -23,7 +24,7 @@ import {
   findIndexFromPath,
   addImportToIndex,
   addExportToIndex,
-  appendIndexExportArray
+  appendIndexExportArray,
 } from "../utils";
 
 export default function (options: ComponentOptions): Rule {
@@ -53,35 +54,38 @@ export default function (options: ComponentOptions): Rule {
       move(parsedPath.path),
     ]);
 
-    udpateIndexFile(tree, options);
-
-    return chain([mergeWith(sourceParametrizedTemplates)]);
+    return chain([
+      mergeWith(sourceParametrizedTemplates),
+      udpateIndexFile(options),
+    ]);
   };
 }
 
-function udpateIndexFile(tree: Tree, options: ComponentOptions) {
-  if (options.skipImport) {
-    return;
-  }
+function udpateIndexFile(options: ComponentOptions): Rule {
+  return (tree: Tree) => {
+    if (options.skipImport) {
+      return;
+    }
 
-  const indexPath = findIndexFromPath(tree, options.path);
+    const indexPath = findIndexFromPath(tree, options.path);
 
-  if (!indexPath) {
-    throw new SchematicsException(
-      "Could not found indexPath for adding import"
-    );
-  }
+    if (!indexPath) {
+      throw new SchematicsException(
+        "Could not found indexPath for adding import"
+      );
+    }
 
-  const componentName = `${strings.classify(options.name)}Component`;
-  const componentFilePath = `./${strings.dasherize(
-    options.name
-  )}/${strings.dasherize(options.name)}.component`;
-
-  addImportToIndex(tree, indexPath, componentName, componentFilePath);
-
-  appendIndexExportArray(tree, indexPath, componentName);
-
-  if (options.type == "view") {
-    addExportToIndex(tree, indexPath, componentFilePath);
-  }
+    const componentName = `${strings.classify(options.name)}Component`;
+    const componentFilePath = `./${strings.dasherize(
+      options.name
+    )}/${strings.dasherize(options.name)}.component`;
+  
+    return chain([
+      addImportToIndex(indexPath, componentName, componentFilePath),
+      appendIndexExportArray(indexPath, componentName),
+      options.type == "view"
+        ? addExportToIndex(indexPath, componentFilePath)
+        : noop(),
+    ]);
+  };
 }
