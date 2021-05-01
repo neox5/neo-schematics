@@ -82,7 +82,7 @@ function getTemplateUrl(type?: ModuleType): string {
     case "core":
       return "./files/core";
     case "layout":
-      return "./files/layout";
+      return "./files/layout/module";
     case "routes":
       return "./files/routes";
     case "shared":
@@ -95,3 +95,10 @@ function getTemplateUrl(type?: ModuleType): string {
 function layoutViewComponentTemplate(prefix: string): string {
   return `<${prefix}-navigation></${prefix}-navigation>\n\t\t<router-outlet></router-outlet>`;
 }
+
+// function addImport(path: string, moduleName: string): Rule {
+//   return (tree: Tree, context: SchematicContext) => {
+//     const indexPath = findIndexFromPath(tree, path)
+
+//   }
+// }

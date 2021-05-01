@@ -1,7 +1,16 @@
 import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { Routes, RouterModule } from "@angular/router";
 
-import { ROUTES } from "./routes";
+import { AppLayoutViewComponent } from "@layouts/app-layout/views";
+
+export const ROUTES: Routes = [
+  {
+    path: "",
+    pathMatch: "prefix",
+    component: AppLayoutViewComponent,
+    children: [],
+  },
+];
 
 // modules
 
