@@ -1,4 +1,4 @@
-export type ModuleType = "" | "core" | "layout" | "routes" | "shared";
+export type ModuleType = "" | "core" | "layout" | "routing" | "shared";
 
 export interface Schema {
   name: string;

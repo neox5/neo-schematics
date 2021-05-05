@@ -91,8 +91,8 @@ function getTemplateUrl(type?: ModuleType): string {
       return "./files/core";
     case "layout":
       return "./files/layout/module";
-    case "routes":
-      return "./files/routes";
+    case "routing":
+      return "./files/routing";
     case "shared":
       return "./files/shared";
     default:

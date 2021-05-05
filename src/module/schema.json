@@ -22,7 +22,7 @@
         "$source": "argv",
         "index": 1
       },
-      "enum": ["", "core", "layout", "routes", "shared"],
+      "enum": ["", "core", "layout", "routing", "shared"],
       "x-prompt": {
         "message": "Which type of module would you like to use?",
         "type": "list",
@@ -30,7 +30,7 @@
           { "value": "",  "label": "Default Module" },
           { "value": "core", "label": "Core Module" },
           { "value": "layout", "label": "Layout Module" },
-          { "value": "routes", "label": "Routes Module" },
+          { "value": "routing", "label": "Routing Module" },
           { "value": "shared", "label": "Shared Module" }
         ]
       }
