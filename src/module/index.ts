@@ -4,6 +4,7 @@ import {
   chain,
   mergeWith,
   move,
+  noop,
   Rule,
   schematic,
   template,
@@ -11,7 +12,10 @@ import {
   url,
 } from "@angular-devkit/schematics";
 import {
+  addImportToIndex,
+  appendIndexExportArray,
   buildDefaultPath,
+  findIndexFromPath,
   getDefaultProjectName,
   getProject,
   getWorkspace,
@@ -50,8 +54,11 @@ export default function (options: ModuleSchema): Rule {
       case "core":
         break;
       case "layout":
-        const subPath = parsedPath.path.replace(project.sourceRoot as string + "/app", "");
-        
+        const subPath = parsedPath.path.replace(
+          (project.sourceRoot as string) + "/app",
+          ""
+        );
+
         const layoutViewComponentOptions = {
           name: `${subPath}/${parsedPath.name}-layout/views/${parsedPath.name}-layout-view`,
           type: "view",
@@ -68,12 +75,13 @@ export default function (options: ModuleSchema): Rule {
 
         rule = chain([
           rule,
+          addImport(parsedPath.path, parsedPath.name + "-layout"),
           schematic("neo-component", layoutViewComponentOptions),
           schematic("neo-component", navigationComponentOptions),
         ]);
     }
 
-    return rule
+    return rule;
   };
 }
 
@@ -96,9 +104,29 @@ function layoutViewComponentTemplate(prefix: string): string {
   return `<${prefix}-navigation></${prefix}-navigation>\n\t\t<router-outlet></router-outlet>`;
 }
 
-// function addImport(path: string, moduleName: string): Rule {
-//   return (tree: Tree, context: SchematicContext) => {
-//     const indexPath = findIndexFromPath(tree, path)
+function addImport(path: string, moduleSymbol: string): Rule {
+  return (tree: Tree) => {
+    let rule: Rule = noop();
+    let indexPath = findIndexFromPath(tree, path);
+    if (indexPath == undefined) {
+      const sourceTemplates = url("./files/layout/index");
+      const sourceParametrizedTemplates = apply(sourceTemplates, [move(path)]);
 
-//   }
-// }
+      rule = mergeWith(sourceParametrizedTemplates);
+      indexPath = path + "/index.ts";
+    }
+
+    console.log(path);
+    console.log(indexPath);
+    console.log(moduleSymbol);
+
+    const moduleName = `${strings.classify(moduleSymbol)}Module`;
+    const moduleFilePath = "./" + moduleSymbol + "/" + moduleSymbol + ".module";
+
+    return chain([
+      rule,
+      addImportToIndex(indexPath, moduleName, moduleFilePath),
+      appendIndexExportArray(indexPath, moduleName),
+    ]);
+  };
+}
