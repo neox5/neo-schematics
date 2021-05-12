@@ -3,7 +3,7 @@
   "id": "neo-schematics://module",
   "title": "Neo Module Options Schema",
   "type": "object",
-  "description": "Creates a module with structural comments",
+  "description": "Creates a different module types",
   "additionalProperties": false,
   "properties": {
     "name": {
@@ -22,16 +22,37 @@
         "$source": "argv",
         "index": 1
       },
-      "enum": ["", "core", "layout", "routing", "shared"],
+      "enum": [
+        "",
+        "core",
+        "layout",
+        "routing",
+        "shared"
+      ],
       "x-prompt": {
         "message": "Which type of module would you like to use?",
         "type": "list",
         "items": [
-          { "value": "",  "label": "Default Module" },
-          { "value": "core", "label": "Core Module" },
-          { "value": "layout", "label": "Layout Module" },
-          { "value": "routing", "label": "Routing Module" },
-          { "value": "shared", "label": "Shared Module" }
+          {
+            "value": "",
+            "label": "Default Module"
+          },
+          {
+            "value": "core",
+            "label": "Core Module"
+          },
+          {
+            "value": "layout",
+            "label": "Layout Module"
+          },
+          {
+            "value": "routing",
+            "label": "Routing Module"
+          },
+          {
+            "value": "shared",
+            "label": "Shared Module"
+          }
         ]
       }
     },
@@ -43,5 +64,7 @@
       }
     }
   },
-  "required": ["name"]
+  "required": [
+    "name"
+  ]
 }

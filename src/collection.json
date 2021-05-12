@@ -6,7 +6,7 @@
   "schematics": {
     "neo-component": {
       "aliases": ["nc"],
-      "description": "A blank schematic.",
+      "description": "Creates a Neo Component",
       "factory": "./component",
       "schema": "./component/schema.json"
     },
@@ -21,9 +21,15 @@
     },
     "neo-module": {
       "aliases": ["nm"],
-      "description": "A blank schematic.",
+      "description": "Creates a Neo Module",
       "factory": "./module/index",
       "schema": "./module/schema.json"
+    },
+    "neo-service": {
+      "aliases": ["ns"],
+      "description": "Creates a Neo Service",
+      "factory": "./service/index",
+      "schema": "./service/schema.json"
     }
   }
 }
