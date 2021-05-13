@@ -25,9 +25,6 @@ export default function (options: ServiceSchema): Rule {
 
     const { symbolDir, symbolName } = splitSubpath(options.subpath);
 
-    console.log("dir:", symbolDir);
-    console.log("symbol:", symbolName);
-
     const sourceTemplates = url(getTemplateUrl(options.type));
     const sourceParametrizedTemplates = apply(sourceTemplates, [
       template({
@@ -42,7 +39,7 @@ export default function (options: ServiceSchema): Rule {
 
     switch (options.type) {
       case "sandbox":
-        if (!options.skipUtil) {
+        if (!options.skiputil) {
           // create utility service for sandbox
           const utilServiceOptions: ServiceSchema = {
             subpath: symbolDir + "/util/" + symbolName,

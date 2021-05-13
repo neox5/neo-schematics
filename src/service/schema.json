@@ -50,7 +50,7 @@
         ]
       }
     },
-    "skipUtil": {
+    "skiputil": {
       "type": "boolean",
       "description": "Do not create utility service when creating a sandbox.",
       "default": false

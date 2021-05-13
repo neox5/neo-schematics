@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 
 import { Observable } from "rxjs";
-
-import { <%= classify(name) %>UtilService } from "./util";
+<% if (!skiputil) { %>
+import { <%= classify(name) %>UtilService } from "./util";<% } %>
 
 @Injectable({
   providedIn: "root",
@@ -11,7 +11,7 @@ export class <%= classify(name) %>SandboxService {
   // ===========================================================================
   // CONSTRUCTOR
   // ===========================================================================
-  constructor(<% if (!skipUtil) { %>private _<%= camelize(name) %>Util: <%= classify(name) %>UtilService<% } %>) {}
+  constructor(<% if (!skiputil) { %>private _<%= camelize(name) %>Util: <%= classify(name) %>UtilService<% } %>) {}
 
   // ===========================================================================
   // GET FUNCTIONS
