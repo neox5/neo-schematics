@@ -22,13 +22,13 @@
     "neo-module": {
       "aliases": ["nm"],
       "description": "Creates a Neo Module",
-      "factory": "./module/index",
+      "factory": "./module",
       "schema": "./module/schema.json"
     },
     "neo-service": {
       "aliases": ["ns"],
       "description": "Creates a Neo Service",
-      "factory": "./service/index",
+      "factory": "./service",
       "schema": "./service/schema.json"
     }
   }

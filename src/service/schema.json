@@ -5,14 +5,14 @@
   "type": "object",
   "description": "Creates a service with structural comments",
   "properties": {
-    "name": {
+    "subpath": {
       "type": "string",
-      "description": "The name of the service",
+      "description": "The subpath of the service",
       "$default": {
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "What name would you like to use for the service?"
+      "x-prompt": "What subpath (app/<subpath>) would you like for the service?"
     },
     "type": {
       "type": "string",
@@ -50,12 +50,17 @@
         ]
       }
     },
+    "skipUtil": {
+      "type": "boolean",
+      "description": "Do not create utility service when creating a sandbox.",
+      "default": false
+    },
     "project": {
       "type": "string",
       "description": "Generate in specific Angular CLI workspace project"
     }
   },
   "required": [
-    "name"
+    "subpath"
   ]
 }

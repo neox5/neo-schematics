@@ -50,3 +50,17 @@ export function buildDefaultPath(
 
   return `${root}${projectDirName}`;
 }
+
+export function buildRootPathFromProject(
+  project: workspaces.ProjectDefinition
+): string {
+  const root = project.sourceRoot
+    ? `/${project.sourceRoot}/`
+    : `/${project.root}/src/`;
+  const projectDirName =
+    project.extensions["projectType"] === ProjectType.Application
+      ? "app"
+      : "lib";
+
+  return `${root}${projectDirName}`;
+}

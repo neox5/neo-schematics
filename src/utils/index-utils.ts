@@ -1,7 +1,13 @@
 import { join, Path } from "@angular-devkit/core";
 import { Rule, Tree, UpdateRecorder } from "@angular-devkit/schematics";
 import { tsquery } from "@phenomnomnominal/tsquery";
-import { Change, InsertChange, NoopChange, RemoveChange, ReplaceChange } from "@schematics/angular/utility/change";
+import {
+  Change,
+  InsertChange,
+  NoopChange,
+  RemoveChange,
+  ReplaceChange,
+} from "@schematics/angular/utility/change";
 
 import { readIntoSourceFile } from "./read-into-source-file";
 
@@ -24,12 +30,16 @@ export function addImportToIndex(
   symbolFilePath: string
 ): Rule {
   return (tree: Tree) => {
+    // https://ts-ast-viewer.com
     const sourceFile = readIntoSourceFile(tree, indexPath);
-  
-    const importNodes = tsquery(sourceFile, "ImportDeclaration > StringLiteral");
-  
+
+    const importNodes = tsquery(
+      sourceFile,
+      "ImportDeclaration > StringLiteral"
+    );
+
     const isBeginning = importNodes.length == 0;
-  
+
     let pos = 0;
     if (!isBeginning) {
       pos = importNodes[importNodes.length - 1].getEnd();
@@ -37,15 +47,15 @@ export function addImportToIndex(
     const separator = isBeginning ? "" : ";\n";
     const lineEnd = isBeginning ? ";\n\n" : "";
     const toInsert = `${separator}import { ${symbolName} } from "${symbolFilePath}"${lineEnd}`;
-  
+
     const recorder = tree.beginUpdate(indexPath);
     const change = new InsertChange(indexPath, pos, toInsert);
-  
+
     applyToUpdateRecorder(recorder, [change]);
     tree.commitUpdate(recorder);
-    
+
     return tree;
-  }
+  };
 }
 
 export function addExportToIndex(
@@ -53,19 +63,21 @@ export function addExportToIndex(
   exportFilePath: string
 ): Rule {
   return (tree: Tree) => {
+    // https://ts-ast-viewer.com
     const sourceFile = readIntoSourceFile(tree, indexPath);
     const isFirst = tsquery(sourceFile, "ExportDeclaration").length == 0;
+    // TODO: fix new line for export only index.ts
     const separator = isFirst ? "\n" : "";
     const toInsert = `${separator}export * from "${exportFilePath}";\n`;
     const endOfFilePos = tsquery(sourceFile, "EndOfFileToken")[0].getStart();
-  
+
     const recorder = tree.beginUpdate(indexPath);
     const change = new InsertChange(indexPath, endOfFilePos, toInsert);
     applyToUpdateRecorder(recorder, [change]);
     tree.commitUpdate(recorder);
-    
+
     return tree;
-  }
+  };
 }
 
 export function appendIndexExportArray(
@@ -80,18 +92,18 @@ export function appendIndexExportArray(
       "ArrayLiteralExpression > Identifier"
     ).length;
     const pos = tsquery(sourceFile, "ArrayLiteralExpression")[0].getEnd();
-  
+
     if (identifierCount !== 0) {
       symbolName = ", " + symbolName;
     }
-  
+
     const recorder = tree.beginUpdate(indexPath);
     const change = new InsertChange(indexPath, pos - 1, symbolName);
     applyToUpdateRecorder(recorder, [change]);
     tree.commitUpdate(recorder);
-    
+
     return tree;
-  }
+  };
 }
 
 function applyToUpdateRecorder(

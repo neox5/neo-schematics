@@ -1,7 +1,8 @@
 export type ServiceType = "" | "api" | "sandbox" | "util" ;
 
 export interface Schema {
-  name: string;
+  subpath:string;
   type?: ServiceType;
+  skipUtil?: boolean;
   project?: string;
 }

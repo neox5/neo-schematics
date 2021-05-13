@@ -45,7 +45,7 @@ export default function (options: ModuleSchema): Rule {
         ...strings,
         name: parsedPath.name,
       }),
-      move(parsedPath.path),
+      move(parsedPath.dir),
     ]);
 
     let rule = mergeWith(sourceParametrizedTemplates);
@@ -54,7 +54,7 @@ export default function (options: ModuleSchema): Rule {
       case "core":
         break;
       case "layout":
-        const subPath = parsedPath.path.replace(
+        const subPath = parsedPath.dir.replace(
           (project.sourceRoot as string) + "/app",
           ""
         );
@@ -75,7 +75,7 @@ export default function (options: ModuleSchema): Rule {
 
         rule = chain([
           rule,
-          addImport(parsedPath.path, parsedPath.name + "-layout"),
+          addImport(parsedPath.dir, parsedPath.name + "-layout"),
           schematic("neo-component", layoutViewComponentOptions),
           schematic("neo-component", navigationComponentOptions),
         ]);

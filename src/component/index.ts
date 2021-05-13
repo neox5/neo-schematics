@@ -43,7 +43,7 @@ export default function (options: ComponentOptions): Rule {
 
     const parsedPath = parseName(options.path as string, options.name);
     options.name = parsedPath.name;
-    options.path = parsedPath.path;
+    options.path = parsedPath.dir;
     options.quotes = getQuoteSetting(tree);
     options.prefix = project.prefix;
 
@@ -51,7 +51,7 @@ export default function (options: ComponentOptions): Rule {
     const sourceTemplates = url("./files");
     const sourceParametrizedTemplates = apply(sourceTemplates, [
       template({ ...options, ...strings }),
-      move(parsedPath.path),
+      move(parsedPath.dir),
     ]);
 
     return chain([

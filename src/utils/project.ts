@@ -1,5 +1,9 @@
-import { ProjectDefinition, WorkspaceDefinition } from "@angular-devkit/core/src/workspace";
-import { SchematicsException } from "@angular-devkit/schematics";
+import {
+  ProjectDefinition,
+  WorkspaceDefinition,
+} from "@angular-devkit/core/src/workspace";
+import { SchematicsException, Tree } from "@angular-devkit/schematics";
+import { buildRootPathFromProject, getWorkspace } from "./workspace";
 
 export function getProject(
   workspace: WorkspaceDefinition,
@@ -21,4 +25,18 @@ export function getProject(
 
 export function getDefaultProjectName(workspace: WorkspaceDefinition): string {
   return workspace.extensions["defaultProject"] as string;
+}
+
+export async function getRootPathFromProject(
+  tree: Tree,
+  pName?: string
+): Promise<string> {
+  const workspace = await getWorkspace(tree);
+
+  let projectName = getDefaultProjectName(workspace);
+  if (pName) {
+    projectName = pName;
+  }
+
+  return buildRootPathFromProject(getProject(workspace, projectName)) + "/";
 }

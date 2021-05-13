@@ -11,7 +11,7 @@ export class <%= classify(name) %>SandboxService {
   // ===========================================================================
   // CONSTRUCTOR
   // ===========================================================================
-  constructor(private _<%= camelize(name) %>Util: <%= classify(name) %>UtilService) {}
+  constructor(<% if (!skipUtil) { %>private _<%= camelize(name) %>Util: <%= classify(name) %>UtilService<% } %>) {}
 
   // ===========================================================================
   // GET FUNCTIONS
