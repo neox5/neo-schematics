@@ -18,69 +18,48 @@ import {
   addExportToIndex,
   addImport,
   appendIndexExportArray,
-  buildDefaultPath,
   findIndexFromPath,
-  getDefaultProjectName,
-  getProject,
+  getPrefix,
   getQuoteSetting,
-  getWorkspace,
-  parseName,
+  getRootPathFromProject,
+  splitSubpath,
 } from "../utils";
 
 export default function (options: ComponentOptions): Rule {
   return async (tree: Tree) => {
-    const workspace = await getWorkspace(tree);
+    const rootPath = await getRootPathFromProject(tree, options.project);
 
-    let projectName = getDefaultProjectName(workspace);
-    if (options.project) {
-      projectName = options.project;
-    }
-    const project = getProject(workspace, projectName);
+    const { symbolDir, symbolName } = splitSubpath(options.subpath);
 
-    if (options.path === undefined && project) {
-      options.path = buildDefaultPath(project);
-    }
-
-    const parsedPath = parseName(options.path as string, options.name);
-    options.name = parsedPath.name;
-    options.path = parsedPath.dir;
-    options.quotes = getQuoteSetting(tree);
-    options.prefix = project.prefix;
+    const quotes = getQuoteSetting(tree);
+    const prefix = await getPrefix(tree, options.project);
 
     // add template
     const sourceTemplates = url("./files");
     const sourceParametrizedTemplates = apply(sourceTemplates, [
-      template({ ...options, ...strings }),
-      move(parsedPath.dir),
+      template({ ...options, ...strings, name: symbolName, quotes, prefix }),
+      move(rootPath + symbolDir),
     ]);
 
-    return chain([
-      mergeWith(sourceParametrizedTemplates),
-      udpateIndexFile(options),
-    ]);
-  };
-}
-
-function udpateIndexFile(options: ComponentOptions): Rule {
-  return (tree: Tree) => {
     if (options.skipImport) {
-      return;
+      return mergeWith(sourceParametrizedTemplates);
     }
 
-    const indexPath = findIndexFromPath(tree, options.path);
-
+    // add import
+    const indexPath = findIndexFromPath(tree, rootPath + symbolDir);
     if (!indexPath) {
       throw new SchematicsException(
         "Could not found indexPath for adding import"
       );
     }
 
-    const componentName = `${strings.classify(options.name)}Component`;
+    const componentName = `${strings.classify(symbolName)}Component`;
     const componentFilePath = `./${strings.dasherize(
-      options.name
-    )}/${strings.dasherize(options.name)}.component`;
-  
+      symbolName
+    )}/${strings.dasherize(symbolName)}.component`;
+
     return chain([
+      mergeWith(sourceParametrizedTemplates),
       addImport(indexPath, componentName, componentFilePath),
       appendIndexExportArray(indexPath, componentName),
       options.type == "view"

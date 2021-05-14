@@ -40,3 +40,17 @@ export async function getRootPathFromProject(
 
   return buildRootPathFromProject(getProject(workspace, projectName)) + "/";
 }
+
+export async function getPrefix(
+  tree: Tree,
+  pName?: string
+): Promise<string> {
+  const workspace = await getWorkspace(tree);
+
+  let projectName = getDefaultProjectName(workspace);
+  if (pName) {
+    projectName = pName;
+  }
+
+  return getProject(workspace, projectName).prefix as string;
+}

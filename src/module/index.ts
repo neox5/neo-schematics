@@ -60,14 +60,14 @@ export default function (options: ModuleSchema): Rule {
         );
 
         const layoutViewComponentOptions = {
-          name: `${subPath}/${parsedPath.name}-layout/views/${parsedPath.name}-layout-view`,
+          subpath: `${subPath}/${parsedPath.name}-layout/views/${parsedPath.name}-layout-view`,
           type: "view",
           template: layoutViewComponentTemplate(project.prefix as string),
           destroyable: false,
           project: projectName,
         };
         const navigationComponentOptions = {
-          name: `${subPath}/${parsedPath.name}-layout/containers/${parsedPath.name}-navigation`,
+          subpath: `${subPath}/${parsedPath.name}-layout/containers/${parsedPath.name}-navigation`,
           type: "container",
           destroyable: false,
           project: projectName,
@@ -115,10 +115,6 @@ function addModuleImport(path: string, moduleSymbol: string): Rule {
       rule = mergeWith(sourceParametrizedTemplates);
       indexPath = path + "/index.ts";
     }
-
-    console.log(path);
-    console.log(indexPath);
-    console.log(moduleSymbol);
 
     const moduleName = `${strings.classify(moduleSymbol)}Module`;
     const moduleFilePath = "./" + moduleSymbol + "/" + moduleSymbol + ".module";
