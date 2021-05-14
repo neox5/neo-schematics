@@ -1,15 +1,10 @@
 import { join, Path } from "@angular-devkit/core";
-import { Rule, Tree, UpdateRecorder } from "@angular-devkit/schematics";
+import { Rule, Tree } from "@angular-devkit/schematics";
 import { tsquery } from "@phenomnomnominal/tsquery";
-import {
-  Change,
-  InsertChange,
-  NoopChange,
-  RemoveChange,
-  ReplaceChange,
-} from "@schematics/angular/utility/change";
+import { InsertChange } from "@schematics/angular/utility/change";
 
 import { readIntoSourceFile } from "./read-into-source-file";
+import { applyToUpdateRecorder } from "./recorder-util";
 
 export function findIndexFromPath(
   tree: Tree,
@@ -22,40 +17,6 @@ export function findIndexFromPath(
   path = join(path as Path, "index.ts");
 
   return tree.exists(path) ? path : undefined;
-}
-
-export function addImportToIndex(
-  indexPath: string,
-  symbolName: string,
-  symbolFilePath: string
-): Rule {
-  return (tree: Tree) => {
-    // https://ts-ast-viewer.com
-    const sourceFile = readIntoSourceFile(tree, indexPath);
-
-    const importNodes = tsquery(
-      sourceFile,
-      "ImportDeclaration > StringLiteral"
-    );
-
-    const isBeginning = importNodes.length == 0;
-
-    let pos = 0;
-    if (!isBeginning) {
-      pos = importNodes[importNodes.length - 1].getEnd();
-    }
-    const separator = isBeginning ? "" : ";\n";
-    const lineEnd = isBeginning ? ";\n\n" : "";
-    const toInsert = `${separator}import { ${symbolName} } from "${symbolFilePath}"${lineEnd}`;
-
-    const recorder = tree.beginUpdate(indexPath);
-    const change = new InsertChange(indexPath, pos, toInsert);
-
-    applyToUpdateRecorder(recorder, [change]);
-    tree.commitUpdate(recorder);
-
-    return tree;
-  };
 }
 
 export function addExportToIndex(
@@ -104,24 +65,4 @@ export function appendIndexExportArray(
 
     return tree;
   };
-}
-
-function applyToUpdateRecorder(
-  recorder: UpdateRecorder,
-  changes: Change[]
-): void {
-  for (const change of changes) {
-    if (change instanceof InsertChange) {
-      recorder.insertLeft(change.pos, change.toAdd);
-    } else if (change instanceof RemoveChange) {
-      recorder.remove(change.order, change.toRemove.length);
-    } else if (change instanceof ReplaceChange) {
-      recorder.remove(change.order, change.oldText.length);
-      recorder.insertLeft(change.order, change.newText);
-    } else if (!(change instanceof NoopChange)) {
-      throw new Error(
-        "Unknown Change type encountered when updating a recorder."
-      );
-    }
-  }
 }

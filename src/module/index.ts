@@ -12,7 +12,7 @@ import {
   url,
 } from "@angular-devkit/schematics";
 import {
-  addImportToIndex,
+  addImport,
   appendIndexExportArray,
   buildDefaultPath,
   findIndexFromPath,
@@ -75,7 +75,7 @@ export default function (options: ModuleSchema): Rule {
 
         rule = chain([
           rule,
-          addImport(parsedPath.dir, parsedPath.name + "-layout"),
+          addModuleImport(parsedPath.dir, parsedPath.name + "-layout"),
           schematic("neo-component", layoutViewComponentOptions),
           schematic("neo-component", navigationComponentOptions),
         ]);
@@ -104,7 +104,7 @@ function layoutViewComponentTemplate(prefix: string): string {
   return `<${prefix}-navigation></${prefix}-navigation>\n\t\t<router-outlet></router-outlet>`;
 }
 
-function addImport(path: string, moduleSymbol: string): Rule {
+function addModuleImport(path: string, moduleSymbol: string): Rule {
   return (tree: Tree) => {
     let rule: Rule = noop();
     let indexPath = findIndexFromPath(tree, path);
@@ -125,7 +125,7 @@ function addImport(path: string, moduleSymbol: string): Rule {
 
     return chain([
       rule,
-      addImportToIndex(indexPath, moduleName, moduleFilePath),
+      addImport(indexPath, moduleName, moduleFilePath),
       appendIndexExportArray(indexPath, moduleName),
     ]);
   };

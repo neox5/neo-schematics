@@ -1,4 +1,4 @@
-import { strings } from "@angular-devkit/core";
+import { join, Path, strings } from "@angular-devkit/core";
 import {
   apply,
   chain,
@@ -11,6 +11,7 @@ import {
   url,
 } from "@angular-devkit/schematics";
 import {
+  addImport,
   addExportToIndex,
   findIndexFromPath,
   getRootPathFromProject,
@@ -63,7 +64,15 @@ export default function (options: ServiceSchema): Rule {
           symbolName
         )}/${strings.dasherize(symbolName)}-util.service`;
 
-        rule = chain([rule, addExportToIndex(indexPath, symbolFilePath)]);
+        rule = chain([
+          rule,
+          addExportToIndex(indexPath, symbolFilePath),
+          addImport(
+            join(rootPath + symbolDir as Path, "../home-sandbox.service.ts"),
+            strings.classify(symbolName + "UtilService"),
+            "./util"
+          ),
+        ]);
 
         break;
     }

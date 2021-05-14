@@ -15,16 +15,16 @@ import {
 import { Schema as ComponentOptions } from "./schema.interface";
 
 import {
+  addExportToIndex,
+  addImport,
+  appendIndexExportArray,
   buildDefaultPath,
+  findIndexFromPath,
   getDefaultProjectName,
   getProject,
   getQuoteSetting,
   getWorkspace,
   parseName,
-  findIndexFromPath,
-  addImportToIndex,
-  addExportToIndex,
-  appendIndexExportArray,
 } from "../utils";
 
 export default function (options: ComponentOptions): Rule {
@@ -81,7 +81,7 @@ function udpateIndexFile(options: ComponentOptions): Rule {
     )}/${strings.dasherize(options.name)}.component`;
   
     return chain([
-      addImportToIndex(indexPath, componentName, componentFilePath),
+      addImport(indexPath, componentName, componentFilePath),
       appendIndexExportArray(indexPath, componentName),
       options.type == "view"
         ? addExportToIndex(indexPath, componentFilePath)
