@@ -5,12 +5,43 @@
   "description": "Initialize angular application for neo structure",
   "additionalProperties": false,
   "properties": {
-    "inlineTemplate": {
+    "prefix": {
+      "description": "Changes current prefix for project.",
+      "type": "string",
+      "default": ""
+    },
+    "inlinetemplate": {
       "description": "Include template inline in the component.ts file. By default, an external template file is created and referenced in the component.ts file.",
       "type": "boolean",
-      "default": true,
-      "alias": "t",
-      "x-prompt": "Using inline templates for components?"
+      "default": false
+    },
+    "pathaliases": {
+      "description": "Add path aliases for assets, core, ... folders to tsconfig.",
+      "type": "boolean",
+      "default": false
+    },
+    "quotes": {
+      "description": "Changes quote setting in tslint to either single or double.",
+      "type": "string",
+      "enum": [
+        "single",
+        "double"
+      ]
+    },
+    "allowunderscore": {
+      "description": "Adds rule to tslint to allow leading underscores.",
+      "type": "boolean",
+      "default": false
+    },
+    "prodscript": {
+      "description": "Adds prod script to package.json.",
+      "type": "boolean",
+      "default": false
+    },
+    "includestylepath": {
+      "description": "Adds style path to stylePreprocessorOptions to access global styling from components.",
+      "type": "boolean",
+      "default": false
     },
     "project": {
       "type": "string",

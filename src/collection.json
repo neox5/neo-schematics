@@ -14,7 +14,7 @@
       "description": "A blank schematic.",
       "factory": "./debug/index#debug"
     },
-    "init": {
+    "neo-init": {
       "description": "Initializes project.",
       "factory": "./init",
       "schema": "./init/schema.json"
