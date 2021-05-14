@@ -1,7 +1,7 @@
 export type ModuleType = "" | "core" | "layout" | "routing" | "shared";
 
 export interface Schema {
-  name: string;
+  subpath: string;
   type?: ModuleType;
   project?: string;
 }

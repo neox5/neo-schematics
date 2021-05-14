@@ -14,38 +14,27 @@ import {
 import {
   addImport,
   appendIndexExportArray,
-  buildDefaultPath,
   findIndexFromPath,
-  getDefaultProjectName,
-  getProject,
-  getWorkspace,
-  parseName,
+  getPrefix,
+  getRootPathFromProject,
+  splitSubpath,
 } from "../utils";
 import { ModuleType, Schema as ModuleSchema } from "./schema.interface";
 
 export default function (options: ModuleSchema): Rule {
   return async (tree: Tree) => {
-    const workspace = await getWorkspace(tree);
+    const rootPath = await getRootPathFromProject(tree, options.project);
 
-    let projectName = getDefaultProjectName(workspace);
-    if (options.project) {
-      projectName = options.project;
-    }
-    const project = getProject(workspace, projectName);
-
-    const parsedPath = parseName(
-      buildDefaultPath(project) as string,
-      options.name
-    );
+    const { symbolDir, symbolName } = splitSubpath(options.subpath);
 
     const sourceTemplates = url(getTemplateUrl(options.type));
     const sourceParametrizedTemplates = apply(sourceTemplates, [
       template({
         ...options,
         ...strings,
-        name: parsedPath.name,
+        name: symbolName,
       }),
-      move(parsedPath.dir),
+      move(rootPath + symbolDir),
     ]);
 
     let rule = mergeWith(sourceParametrizedTemplates);
@@ -54,28 +43,24 @@ export default function (options: ModuleSchema): Rule {
       case "core":
         break;
       case "layout":
-        const subPath = parsedPath.dir.replace(
-          (project.sourceRoot as string) + "/app",
-          ""
-        );
-
+        const prefix = await getPrefix(tree, options.project);
         const layoutViewComponentOptions = {
-          subpath: `${subPath}/${parsedPath.name}-layout/views/${parsedPath.name}-layout-view`,
+          subpath: `${symbolDir}/${symbolName}-layout/views/${symbolName}-layout-view`,
           type: "view",
-          template: layoutViewComponentTemplate(project.prefix as string),
+          template: layoutViewComponentTemplate(prefix),
           destroyable: false,
-          project: projectName,
+          project: options.project,
         };
         const navigationComponentOptions = {
-          subpath: `${subPath}/${parsedPath.name}-layout/containers/${parsedPath.name}-navigation`,
+          subpath: `${symbolDir}/${symbolName}-layout/containers/${symbolName}-navigation`,
           type: "container",
           destroyable: false,
-          project: projectName,
+          project: options.project,
         };
 
         rule = chain([
           rule,
-          addModuleImport(parsedPath.dir, parsedPath.name + "-layout"),
+          addModuleImport(rootPath + symbolDir, symbolName + "-layout"),
           schematic("neo-component", layoutViewComponentOptions),
           schematic("neo-component", navigationComponentOptions),
         ]);
