@@ -13,6 +13,7 @@ import {
 import {
   addImport,
   addExportToIndex,
+  addToConstructor,
   findIndexFromPath,
   getRootPathFromProject,
   splitSubpath,
@@ -60,18 +61,22 @@ export default function (options: ServiceSchema): Rule {
 
         // add export to index.ts
         const indexPath = rootPath + symbolDir + "/index.ts";
+        const symbolFullName = strings.classify(symbolName + "UtilService");
+        const symbolVarName = "_" + strings.camelize(symbolName + "UtilService");
         const symbolFilePath = `./${strings.dasherize(
           symbolName
         )}/${strings.dasherize(symbolName)}-util.service`;
 
+        const sandboxPath = join(
+          (rootPath + symbolDir) as Path,
+          "../home-sandbox.service.ts"
+        );
+
         rule = chain([
           rule,
           addExportToIndex(indexPath, symbolFilePath),
-          addImport(
-            join(rootPath + symbolDir as Path, "../home-sandbox.service.ts"),
-            strings.classify(symbolName + "UtilService"),
-            "./util"
-          ),
+          addImport(sandboxPath, symbolFullName, "./util"),
+          addToConstructor(sandboxPath, symbolVarName, symbolFullName),
         ]);
 
         break;
