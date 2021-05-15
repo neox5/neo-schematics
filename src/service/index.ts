@@ -41,19 +41,24 @@ export default function (options: ServiceSchema): Rule {
 
     switch (options.type) {
       case "sandbox":
-        if (!options.skiputil) {
-          // create utility service for sandbox
-          const utilServiceOptions: ServiceSchema = {
-            subpath: symbolDir + "/util/" + symbolName,
-            type: "util",
-            project: options.project,
-          };
-
-          rule = chain([rule, schematic("neo-service", utilServiceOptions)]);
+        if (options.skiputil) {
+          break;
         }
+        // create utility service for sandbox
+        const utilServiceOptions: ServiceSchema = {
+          subpath: symbolDir + "/util/" + symbolName,
+          type: "util",
+          project: options.project,
+        };
+
+        rule = chain([rule, schematic("neo-service", utilServiceOptions)]);
 
         break;
       case "util":
+        if (options.skipimport) {
+          break;
+        }
+
         if (!findIndexFromPath(tree, rootPath + symbolDir)) {
           // if not index.ts file exists create one
           tree.create(rootPath + symbolDir + "/index.ts", "");
@@ -62,7 +67,8 @@ export default function (options: ServiceSchema): Rule {
         // add export to index.ts
         const indexPath = rootPath + symbolDir + "/index.ts";
         const symbolFullName = strings.classify(symbolName + "UtilService");
-        const symbolVarName = "_" + strings.camelize(symbolName + "UtilService");
+        const symbolVarName =
+          "_" + strings.camelize(symbolName + "UtilService");
         const symbolFilePath = `./${strings.dasherize(
           symbolName
         )}/${strings.dasherize(symbolName)}-util.service`;
