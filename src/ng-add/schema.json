@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "neo-schematics://ng-add",
+  "title": "Neo ng-add",
+  "description": "Creates neo base folder structure.",
+  "additionalProperties": false,
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project. If not defined defaultProject gets used.",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  }
+}

@@ -4,15 +4,15 @@
   ],
   "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
+    "ng-add": {
+      "description": "Creates neo base folder structure.",
+      "factory": "./ng-add/index#ngAdd"
+    },
     "neo-component": {
       "aliases": ["nc"],
       "description": "Creates a Neo Component",
       "factory": "./component",
       "schema": "./component/schema.json"
-    },
-    "debug": {
-      "description": "A blank schematic.",
-      "factory": "./debug/index#debug"
     },
     "neo-init": {
       "description": "Initializes project.",
