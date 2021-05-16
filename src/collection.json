@@ -6,7 +6,7 @@
   "schematics": {
     "ng-add": {
       "description": "Creates neo base folder structure.",
-      "factory": "./ng-add/index#ngAdd"
+      "factory": "./ng-add"
     },
     "neo-component": {
       "aliases": ["nc"],
@@ -15,6 +15,7 @@
       "schema": "./component/schema.json"
     },
     "neo-init": {
+      "aliases": ["ni"],
       "description": "Initializes project.",
       "factory": "./init",
       "schema": "./init/schema.json"

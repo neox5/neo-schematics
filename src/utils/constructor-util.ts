@@ -9,7 +9,7 @@ export function addToConstructor(
   varName: string,
   symbolName: string
 ): Rule {
-  return (tree: Tree) => {
+  return async (tree: Tree) => {
     const sourceFile = readIntoSourceFile(tree, filePath);
     const constructorParameters = tsquery(
       sourceFile,
@@ -33,6 +33,6 @@ export function addToConstructor(
     applyToUpdateRecorder(recorder, [change]);
     tree.commitUpdate(recorder);
 
-    return tree;
+    return;
   };
 }

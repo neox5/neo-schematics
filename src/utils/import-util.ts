@@ -51,8 +51,8 @@ export function addImport(
     // add after last import statement
     const pos = importNodes[importNodes.length - 1].getEnd(); // after last import
 
-    const separator = ";\n";   // this fixes the issue that the insert happens before the previous semicolon
-    const lineEnd = "";        // for that reason we do not add a semicolon to the end
+    const separator = "\n";   // this fixes the issue that the insert happens before the previous semicolon
+    const lineEnd = ";";        // for that reason we do not add a semicolon to the end
     const toInsert = `${separator}import { ${symbolName} } from "${symbolFilePath}"${lineEnd}`;
 
     const recorder = tree.beginUpdate(filePath);

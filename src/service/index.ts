@@ -17,6 +17,7 @@ import {
   findIndexFromPath,
   getRootPathFromProject,
   splitSubpath,
+  runPrettier,
 } from "../utils";
 
 import { Schema as ServiceSchema, ServiceType } from "./schema.interface";
@@ -83,6 +84,7 @@ export default function (options: ServiceSchema): Rule {
           addExportToIndex(indexPath, symbolFilePath),
           addImport(sandboxPath, symbolFullName, "./util"),
           addToConstructor(sandboxPath, symbolVarName, symbolFullName),
+          runPrettier(sandboxPath),
         ]);
 
         break;

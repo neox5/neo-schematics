@@ -4,6 +4,7 @@ export * from "./get-quote-setting";
 export * from "./import-util";
 export * from "./index-utils";
 export * from "./parse-name";
+export * from "./prettier-util";
 export * from "./project";
 export * from "./read-into-source-file";
 export * from "./split-subpath";

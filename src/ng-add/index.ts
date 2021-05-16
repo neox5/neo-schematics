@@ -18,7 +18,7 @@ export default function (options: AddSchema): Rule {
     }
 
     const layoutModuleOptions: ModuleSchema = {
-      subpath: "layout",
+      subpath: "layouts/app",
       type: "layout",
       project: options.project
     }
