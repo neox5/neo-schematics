@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "neo-schematics://component",
+  "$id": "neo-schematics://component",
   "title": "Neo Component Options Schema",
   "type": "object",
   "description": "Creates a component with structural comments",

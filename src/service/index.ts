@@ -40,7 +40,34 @@ export default function (options: ServiceSchema): Rule {
 
     let rule = mergeWith(sourceParametrizedTemplates);
 
+    // Fixes: Cannot redeclare block-scoped variable e.g. "indexPath"
+    let indexPath;
+    let symbolFilePath;
+
     switch (options.type) {
+      case "api":
+        if (options.skipimport) {
+          break;
+        }
+
+        if (!findIndexFromPath(tree, rootPath + symbolDir)) {
+          // if not index.ts file exists create one
+          tree.create(rootPath + symbolDir + "/index.ts", "");
+        }
+
+        // add export to index.ts
+        indexPath = rootPath + symbolDir + "/index.ts";
+        symbolFilePath = `./${strings.dasherize(
+          symbolName
+        )}/${strings.dasherize(symbolName)}-api.service`;
+
+        rule = chain([
+          rule,
+          addExportToIndex(indexPath, symbolFilePath),
+          runPrettier(indexPath),
+        ]);
+
+        break;
       case "sandbox":
         if (options.skiputil) {
           break;
@@ -66,11 +93,11 @@ export default function (options: ServiceSchema): Rule {
         }
 
         // add export to index.ts
-        const indexPath = rootPath + symbolDir + "/index.ts";
+        indexPath = rootPath + symbolDir + "/index.ts";
         const symbolFullName = strings.classify(symbolName + "UtilService");
         const symbolVarName =
           "_" + strings.camelize(symbolName + "UtilService");
-        const symbolFilePath = `./${strings.dasherize(
+        symbolFilePath = `./${strings.dasherize(
           symbolName
         )}/${strings.dasherize(symbolName)}-util.service`;
 

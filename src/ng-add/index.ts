@@ -1,10 +1,15 @@
 import { chain, Rule, schematic } from '@angular-devkit/schematics';
 
 import { Schema as AddSchema } from "./schema.interface";
+import { Schema as InitSchema } from "../init/schema.interface";
 import { Schema as ModuleSchema } from "../module/schema.interface";
 
 export default function (options: AddSchema): Rule {
   return () => {
+    const initOptions: InitSchema = {
+      pathaliases: true,
+      project: options.project
+    }
     const coreModuleOptions: ModuleSchema = {
       subpath: "core",
       type: "core",
@@ -30,6 +35,7 @@ export default function (options: AddSchema): Rule {
     }
 
     return chain([
+      schematic("neo-init", initOptions),
       schematic("neo-module", coreModuleOptions),
       schematic("neo-module", sharedModuleOptions),
       schematic("neo-module", layoutModuleOptions),

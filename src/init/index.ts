@@ -6,6 +6,7 @@ import {
   getDefaultProjectName,
   getWorkspace,
   getProject,
+  getFile,
 } from "../utils";
 
 export default function (options: InitOptions): Rule {
@@ -40,17 +41,20 @@ export default function (options: InitOptions): Rule {
 
       tree.overwrite("angular.json", JSON.stringify(angularJson, null, 2));
     } else {
-      console.warn(
-        "Neo Schematics currently supports inline templates only! \n\t $ ng generate neo-init --inlinetemplates"
-      );
+      // console.warn(
+      //   "Neo Schematics currently supports inline templates only! \n\t $ ng generate neo-init --inlinetemplates"
+      // );
       // throw new SchematicsException(
       //   "Neo Schematics currently supports inline templates only!"
       // );
     }
 
     if (options.pathaliases) {
-      const tsconfig = getJson(tree, project.root + "/tsconfig.app.json");
-      tsconfig.compilerOptions.baseUrl = "./src";
+      console.warn(
+        "This works only for single project workspaces at the moment."
+      );
+      const tsconfig = getJson(tree, "tsconfig.json");
+      tsconfig.compilerOptions.baseUrl = project.sourceRoot;
       tsconfig.compilerOptions["paths"] = {};
       tsconfig.compilerOptions["paths"]["@assets/*"] = ["assets/*"];
       tsconfig.compilerOptions["paths"]["@core/*"] = ["app/core/*"];
@@ -58,54 +62,22 @@ export default function (options: InitOptions): Rule {
       tsconfig.compilerOptions["paths"]["@routes/*"] = ["app/routes/*"];
       tsconfig.compilerOptions["paths"]["@shared/*"] = ["app/shared/*"];
       tsconfig.compilerOptions["paths"]["@env/*"] = ["environments/*"];
-      tree.overwrite(
-        project.root + "/tsconfig.app.json",
-        JSON.stringify(tsconfig, null, 2)
-      );
+
+      tree.overwrite("tsconfig.json", JSON.stringify(tsconfig, null, 2));
     }
 
     if (options.quotes == "single" || options.quotes == "double") {
-      const tslint = getJson(tree, "tslint.json");
-      tslint.rules.quotemark = [true, options.quotes];
-      tree.overwrite("tslint.json", JSON.stringify(tslint, null, 2));
-    }
+      let editorConfig = getFile(tree, ".editorconfig");
+      const quoteRegex = /quote_type\s*=\s*(?:double|single)/gm;
+      const newSetting = `quote_type = ${options.quotes}`;
 
-    if (options.allowunderscore) {
-      // tree.overwrite should only be envoked when an update happend
-      const tslint = getJson(tree, project.root + "/tslint.json");
-      const rules = tslint["rules"];
-
-      // check if variable-name rules exists
-      if (tslint["rules"]["variable-name"]) {
-        const opts = tslint["rules"]["variable-name"]["options"];
-        // check if optoin is already added
-        if (opts.indexOf("allow-leading-underscore") === -1) {
-          tslint["rules"]["variable-name"]["options"] = [
-            ...opts,
-            "allow-leading-underscore",
-          ];
-          tree.overwrite(
-            project.root + "/tslint.json",
-            JSON.stringify(tslint, null, 2)
-          );
-        }
-      } else {
-        tslint["rules"] = {
-          ...rules,
-          "variable-name": {
-            options: ["allow-leading-underscore"],
-          },
-        };
-        tree.overwrite(
-          project.root + "/tslint.json",
-          JSON.stringify(tslint, null, 2)
-        );
-      }
+      editorConfig = editorConfig.replace(quoteRegex, newSetting);
+      tree.overwrite(".editorconfig", editorConfig);
     }
 
     if (options.prodscript) {
       const packageJson = getJson(tree, "package.json");
-      packageJson.scripts["prod"] = "ng build --prod";
+      packageJson.scripts["prod"] = "ng build --configuration production";
       tree.overwrite("package.json", JSON.stringify(packageJson, null, 2));
     }
 

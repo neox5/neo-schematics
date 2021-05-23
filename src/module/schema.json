@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "neo-schematics://module",
+  "$id": "neo-schematics://module",
   "title": "Neo Module Options Schema",
   "type": "object",
   "description": "Creates a different module types",

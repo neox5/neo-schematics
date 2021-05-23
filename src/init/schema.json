@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "neo-schematics://init",
+  "$id": "neo-schematics://init",
   "title": "Neo Init",
   "description": "Initialize angular application for neo structure",
   "additionalProperties": false,
@@ -27,11 +27,6 @@
         "single",
         "double"
       ]
-    },
-    "allowunderscore": {
-      "description": "Adds rule to tslint to allow leading underscores.",
-      "type": "boolean",
-      "default": false
     },
     "prodscript": {
       "description": "Adds prod script to package.json.",

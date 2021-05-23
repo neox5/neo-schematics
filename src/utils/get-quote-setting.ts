@@ -1,14 +1,13 @@
 import { Tree } from "@angular-devkit/schematics";
-import { getJson } from "./get-json";
+import { getFile } from "./file-util";
 
 export function getQuoteSetting(tree: Tree): "single" | "double" {
-  const tslint = getJson(tree, "tslint.json");
-  let doubleQuotes = false;
-
-  if (tslint && tslint.rules && tslint.rules.quotemark) {
-    // quotemark is a string list which includes the single/double setting
-    doubleQuotes = (tslint.rules.quotemark as string[]).includes("double");
+  const editorConfig = getFile(tree, ".editorconfig");
+  const quoteRegex = /quote_type\s*=\s*(double|single)/g;
+  const match = quoteRegex.exec(editorConfig);
+  
+  if (match && match.length > 0) {
+    return match[1] as "single" | "double";
   }
-
-  return doubleQuotes ? "double" : "single";
+  return "double";
 }

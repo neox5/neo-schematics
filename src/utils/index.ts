@@ -1,5 +1,5 @@
 export * from "./constructor-util";
-export * from "./get-json";
+export * from "./file-util";
 export * from "./get-quote-setting";
 export * from "./import-util";
 export * from "./index-utils";
