@@ -1,8 +1,5 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "defaultCollection": "../../src/collection.json"
-  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -11,6 +8,9 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
         }
       },
       "root": "projects/app-one",
@@ -25,7 +25,7 @@
             "main": "projects/app-one/src/main.ts",
             "polyfills": "projects/app-one/src/polyfills.ts",
             "tsConfig": "projects/app-one/tsconfig.app.json",
-            "aot": true,
+            "inlineStyleLanguage": "scss",
             "assets": [
               "projects/app-one/src/favicon.ico",
               "projects/app-one/src/assets"
@@ -37,44 +37,48 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "projects/app-one/src/environments/environment.ts",
                   "with": "projects/app-one/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "app-one:build"
-          },
           "configurations": {
             "production": {
               "browserTarget": "app-one:build:production"
+            },
+            "development": {
+              "browserTarget": "app-one:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -89,6 +93,7 @@
             "polyfills": "projects/app-one/src/polyfills.ts",
             "tsConfig": "projects/app-one/tsconfig.spec.json",
             "karmaConfig": "projects/app-one/karma.conf.js",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "projects/app-one/src/favicon.ico",
               "projects/app-one/src/assets"
@@ -98,33 +103,9 @@
             ],
             "scripts": []
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/app-one/tsconfig.app.json",
-              "projects/app-one/tsconfig.spec.json",
-              "projects/app-one/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/app-one/e2e/protractor.conf.js",
-            "devServerTarget": "app-one:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "app-one:serve:production"
-            }
-          }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "app-one"
 }
