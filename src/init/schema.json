@@ -5,6 +5,11 @@
   "description": "Initialize angular application for neo structure",
   "additionalProperties": false,
   "properties": {
+    "default": {
+      "description": "Sets neo schematics as default.",
+      "type": "boolean",
+      "default": false
+    },
     "prefix": {
       "description": "Changes current prefix for project.",
       "type": "string",
@@ -44,6 +49,11 @@
       "$default": {
         "$source": "projectName"
       }
+    },
+    "debug": {
+      "type": "boolean",
+      "description": "Runs debug script for easier problem analysis",
+      "default": false
     }
   }
 }

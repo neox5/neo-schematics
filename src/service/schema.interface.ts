@@ -6,4 +6,5 @@ export interface Schema {
   skiputil?: boolean;
   skipimport?: boolean;
   project?: string;
+  debug?: boolean;
 }

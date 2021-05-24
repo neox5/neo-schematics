@@ -6,7 +6,13 @@ import { Schema as ModuleSchema } from "../module/schema.interface";
 
 export default function (options: AddSchema): Rule {
   return () => {
+    let rule = chain([]);
+    if (options.debug) {
+      rule = chain([rule, schematic("debug", options)]);
+    }
+
     const initOptions: InitSchema = {
+      default: true,
       pathaliases: true,
       project: options.project
     }
@@ -35,6 +41,7 @@ export default function (options: AddSchema): Rule {
     }
 
     return chain([
+      rule,
       schematic("neo-init", initOptions),
       schematic("neo-module", coreModuleOptions),
       schematic("neo-module", sharedModuleOptions),

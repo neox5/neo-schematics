@@ -58,6 +58,11 @@
     "template": {
       "type": "string",
       "description": "Adds inlineTemplate string"
+    },
+    "debug": {
+      "type": "boolean",
+      "description": "Runs debug script for easier problem analysis",
+      "default": false
     }
   },
   "required": [

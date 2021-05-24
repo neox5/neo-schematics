@@ -1,3 +1,14 @@
 # Ignores TypeScript files, but keeps definitions.
 *.ts
 !*.d.ts
+*spec.d.ts
+
+# remove test files and source maps
+*spec.js
+*js.map
+
+# keep template files
+!**/*files/**/*
+
+# removes example project
+example

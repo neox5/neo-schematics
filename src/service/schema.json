@@ -63,6 +63,11 @@
     "project": {
       "type": "string",
       "description": "Generate in specific Angular CLI workspace project"
+    },
+    "debug": {
+      "type": "boolean",
+      "description": "Runs debug script for easier problem analysis",
+      "default": false
     }
   },
   "required": [

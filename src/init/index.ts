@@ -1,4 +1,4 @@
-import { Rule, SchematicContext, Tree } from "@angular-devkit/schematics";
+import { chain, Rule, schematic, SchematicContext, Tree } from "@angular-devkit/schematics";
 
 import { Schema as InitOptions } from "./schema.interface";
 import {
@@ -11,6 +11,11 @@ import {
 
 export default function (options: InitOptions): Rule {
   return async (tree: Tree, _context: SchematicContext) => {
+    let rule = chain([]);
+    if (options.debug) {
+      rule = chain([rule, schematic("debug", options)]);
+    }
+
     const workspace = await getWorkspace(tree);
 
     let projectName = getDefaultProjectName(workspace);
@@ -19,6 +24,12 @@ export default function (options: InitOptions): Rule {
     }
 
     const project = getProject(workspace, projectName);
+
+    if (options.default) {
+      const angularJson = getJson(tree, "angular.json");
+      angularJson["cli"] = { defaultCollection: "@neox/schematics" };
+      tree.overwrite("angular.json", JSON.stringify(angularJson, null, 2));
+    }
 
     if (options.prefix != "") {
       const angularJson = getJson(tree, "angular.json");
@@ -58,7 +69,7 @@ export default function (options: InitOptions): Rule {
       tsconfig.compilerOptions["paths"] = {};
       tsconfig.compilerOptions["paths"]["@assets/*"] = ["assets/*"];
       tsconfig.compilerOptions["paths"]["@core/*"] = ["app/core/*"];
-      tsconfig.compilerOptions["paths"]["@layout/*"] = ["app/layout/*"];
+      tsconfig.compilerOptions["paths"]["@layouts/*"] = ["app/layouts/*"];
       tsconfig.compilerOptions["paths"]["@routes/*"] = ["app/routes/*"];
       tsconfig.compilerOptions["paths"]["@shared/*"] = ["app/shared/*"];
       tsconfig.compilerOptions["paths"]["@env/*"] = ["environments/*"];
@@ -94,6 +105,6 @@ export default function (options: InitOptions): Rule {
       tree.overwrite("angular.json", JSON.stringify(angularJson, null, 2));
     }
 
-    return;
+    return rule;
   };
 }

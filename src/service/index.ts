@@ -24,6 +24,11 @@ import { Schema as ServiceSchema, ServiceType } from "./schema.interface";
 
 export default function (options: ServiceSchema): Rule {
   return async (tree: Tree) => {
+    let rule = chain([]);
+    if (options.debug) {
+      rule = chain([rule, schematic("debug", options)]);
+    }
+
     const rootPath = await getRootPathFromProject(tree, options.project);
 
     const { symbolDir, symbolName } = splitSubpath(options.subpath);
@@ -38,7 +43,7 @@ export default function (options: ServiceSchema): Rule {
       move(rootPath + symbolDir),
     ]);
 
-    let rule = mergeWith(sourceParametrizedTemplates);
+    rule = chain([rule, mergeWith(sourceParametrizedTemplates)]);
 
     // Fixes: Cannot redeclare block-scoped variable e.g. "indexPath"
     let indexPath;

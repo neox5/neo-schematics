@@ -62,6 +62,11 @@
       "$default": {
         "$source": "projectName"
       }
+    },
+    "debug": {
+      "type": "boolean",
+      "description": "Runs debug script for easier problem analysis",
+      "default": false
     }
   },
   "required": [

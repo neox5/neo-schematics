@@ -26,8 +26,8 @@
       "@core/*": [
         "app/core/*"
       ],
-      "@layouts/*": [
-        "app/layouts/*"
+      "@layout/*": [
+        "app/layout/*"
       ],
       "@routes/*": [
         "app/routes/*"

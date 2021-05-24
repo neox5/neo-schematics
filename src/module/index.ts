@@ -23,6 +23,11 @@ import { ModuleType, Schema as ModuleSchema } from "./schema.interface";
 
 export default function (options: ModuleSchema): Rule {
   return async (tree: Tree) => {
+    let rule = chain([]);
+    if (options.debug) {
+      rule = chain([rule, schematic("debug", options)]);
+    }
+
     const rootPath = await getRootPathFromProject(tree, options.project);
 
     const { symbolDir, symbolName } = splitSubpath(options.subpath);
@@ -37,7 +42,7 @@ export default function (options: ModuleSchema): Rule {
       move(rootPath + symbolDir),
     ]);
 
-    let rule = mergeWith(sourceParametrizedTemplates);
+    rule = chain([rule, mergeWith(sourceParametrizedTemplates)]);
 
     switch (options.type) {
       case "core":
@@ -96,7 +101,6 @@ function addModuleImport(path: string, moduleSymbol: string): Rule {
     if (indexPath == undefined) {
       const sourceTemplates = url("./files/layout/index");
       const sourceParametrizedTemplates = apply(sourceTemplates, [move(path)]);
-
       rule = mergeWith(sourceParametrizedTemplates);
       indexPath = path + "/index.ts";
     }

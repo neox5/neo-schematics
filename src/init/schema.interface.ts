@@ -1,10 +1,12 @@
 export interface Schema {
-  prefix?: string;
+  default?: boolean;
+  includestylepath?: boolean;
   inlinetemplate?: boolean;
   pathaliases?: boolean;
-  quotes?: string;
+  prefix?: string;
   prodscript?: boolean;
-  includestylepath?: boolean;
+  quotes?: string;
 
   project?: string;
+  debug?: boolean;
 }

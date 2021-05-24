@@ -8,4 +8,5 @@ export interface Schema {
   sandboxName?: string;
   destroyable?: boolean;
   project?: string;
+  debug?: boolean;
 }

@@ -6,6 +6,7 @@ import {
   move,
   noop,
   Rule,
+  schematic,
   SchematicsException,
   template,
   Tree,
@@ -27,6 +28,11 @@ import {
 
 export default function (options: ComponentOptions): Rule {
   return async (tree: Tree) => {
+    let rule = chain([]);
+    if (options.debug) {
+      rule = chain([rule, schematic("debug", options)]);
+    }
+
     const rootPath = await getRootPathFromProject(tree, options.project);
 
     const { symbolDir, symbolName } = splitSubpath(options.subpath);
@@ -42,7 +48,7 @@ export default function (options: ComponentOptions): Rule {
     ]);
 
     if (options.skipImport) {
-      return mergeWith(sourceParametrizedTemplates);
+      return chain([rule, mergeWith(sourceParametrizedTemplates)]);
     }
 
     // add import
@@ -59,6 +65,7 @@ export default function (options: ComponentOptions): Rule {
     )}/${strings.dasherize(symbolName)}.component`;
 
     return chain([
+      rule,
       mergeWith(sourceParametrizedTemplates),
       addImport(indexPath, componentName, componentFilePath),
       appendIndexExportArray(indexPath, componentName),

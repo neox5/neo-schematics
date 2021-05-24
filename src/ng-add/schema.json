@@ -10,6 +10,11 @@
       "description": "The name of the project. If not defined defaultProject gets used.",
       "$default": {
         "$source": "projectName"
+      },
+      "debug": {
+        "type": "boolean",
+        "description": "Runs debug script for easier problem analysis",
+        "default": false
       }
     }
   }

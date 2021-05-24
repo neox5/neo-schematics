@@ -31,6 +31,10 @@
       "description": "Creates a Neo Service",
       "factory": "./service",
       "schema": "./service/schema.json"
+    },
+    "debug": {
+      "description": "Debugging input values",
+      "factory": "./debug"
     }
   }
 }
