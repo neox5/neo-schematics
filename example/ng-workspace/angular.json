@@ -1,40 +1,38 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "defaultCollection": "../../src/collection.json"
-  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "app-one": {
+    "flustron-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "inlineTemplate": true,
           "style": "scss"
         },
         "@schematics/angular:application": {
           "strict": true
         }
       },
-      "root": "projects/app-one",
-      "sourceRoot": "projects/app-one/src",
-      "prefix": "app",
+      "root": "projects/flustron-app",
+      "sourceRoot": "projects/flustron-app/src",
+      "prefix": "fa",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/app-one",
-            "index": "projects/app-one/src/index.html",
-            "main": "projects/app-one/src/main.ts",
-            "polyfills": "projects/app-one/src/polyfills.ts",
-            "tsConfig": "projects/app-one/tsconfig.app.json",
+            "outputPath": "dist/flustron-app",
+            "index": "projects/flustron-app/src/index.html",
+            "main": "projects/flustron-app/src/main.ts",
+            "polyfills": "projects/flustron-app/src/polyfills.ts",
+            "tsConfig": "projects/flustron-app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/app-one/src/favicon.ico",
-              "projects/app-one/src/assets"
+              "projects/flustron-app/src/favicon.ico",
+              "projects/flustron-app/src/assets"
             ],
             "styles": [
-              "projects/app-one/src/styles.scss"
+              "projects/flustron-app/src/styles.scss"
             ],
             "scripts": []
           },
@@ -54,8 +52,8 @@
               ],
               "fileReplacements": [
                 {
-                  "replace": "projects/app-one/src/environments/environment.ts",
-                  "with": "projects/app-one/src/environments/environment.prod.ts"
+                  "replace": "projects/flustron-app/src/environments/environment.ts",
+                  "with": "projects/flustron-app/src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"
@@ -75,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app-one:build:production"
+              "browserTarget": "flustron-app:build:production"
             },
             "development": {
-              "browserTarget": "app-one:build:development"
+              "browserTarget": "flustron-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,29 +84,31 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "app-one:build"
+            "browserTarget": "flustron-app:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/app-one/src/test.ts",
-            "polyfills": "projects/app-one/src/polyfills.ts",
-            "tsConfig": "projects/app-one/tsconfig.spec.json",
-            "karmaConfig": "projects/app-one/karma.conf.js",
+            "main": "projects/flustron-app/src/test.ts",
+            "polyfills": "projects/flustron-app/src/polyfills.ts",
+            "tsConfig": "projects/flustron-app/tsconfig.spec.json",
+            "karmaConfig": "projects/flustron-app/karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/app-one/src/favicon.ico",
-              "projects/app-one/src/assets"
+              "projects/flustron-app/src/favicon.ico",
+              "projects/flustron-app/src/assets"
             ],
             "styles": [
-              "projects/app-one/src/styles.scss"
+              "projects/flustron-app/src/styles.scss"
             ],
             "scripts": []
           }
         }
       }
-    }
+    }},
+  "cli": {
+    "defaultCollection": "../../src/collection.json"
   },
-  "defaultProject": "app-one"
+  "defaultProject": "flustron-app"
 }

@@ -4,7 +4,6 @@ export interface Schema {
   inlinetemplate?: boolean;
   pathaliases?: boolean;
   prefix?: string;
-  prodscript?: boolean;
   quotes?: string;
 
   project?: string;

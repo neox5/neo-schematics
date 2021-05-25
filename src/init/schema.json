@@ -33,11 +33,6 @@
         "double"
       ]
     },
-    "prodscript": {
-      "description": "Adds prod script to package.json.",
-      "type": "boolean",
-      "default": false
-    },
     "includestylepath": {
       "description": "Adds style path to stylePreprocessorOptions to access global styling from components.",
       "type": "boolean",

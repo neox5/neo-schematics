@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "neo-schematics://ng-add",
-  "title": "Neo ng-add",
+  "$id": "neo-schematics://base",
+  "title": "Neo base",
   "description": "Creates neo base folder structure.",
   "additionalProperties": false,
   "properties": {

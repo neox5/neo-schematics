@@ -20,6 +20,7 @@ import {
   splitSubpath,
 } from "../utils";
 import { ModuleType, Schema as ModuleSchema } from "./schema.interface";
+import { Schema as ComponentSchema } from "../component/schema.interface";
 
 export default function (options: ModuleSchema): Rule {
   return async (tree: Tree) => {
@@ -45,18 +46,32 @@ export default function (options: ModuleSchema): Rule {
     rule = chain([rule, mergeWith(sourceParametrizedTemplates)]);
 
     switch (options.type) {
+      case "":
+        if (options.skipview) {
+          break;
+        }
+        
+        const viewComponentOptions: ComponentSchema = {
+          subpath: `${symbolDir}/${symbolName}/views/${symbolName}`,
+          type: "view",
+          destroyable: false,
+          project: options.project,
+        };
+
+        rule = chain([rule, schematic("neo-component", viewComponentOptions)]);
+        break;
       case "core":
         break;
       case "layout":
         const prefix = await getPrefix(tree, options.project);
-        const layoutViewComponentOptions = {
+        const layoutViewComponentOptions: ComponentSchema = {
           subpath: `${symbolDir}/${symbolName}-layout/views/${symbolName}-layout-view`,
           type: "view",
           template: layoutViewComponentTemplate(prefix),
           destroyable: false,
           project: options.project,
         };
-        const navigationComponentOptions = {
+        const navigationComponentOptions: ComponentSchema = {
           subpath: `${symbolDir}/${symbolName}-layout/containers/${symbolName}-navigation`,
           type: "container",
           destroyable: false,

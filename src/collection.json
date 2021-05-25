@@ -8,6 +8,12 @@
       "description": "Creates neo base folder structure.",
       "factory": "./ng-add"
     },
+    "neo-base": {
+      "aliases": ["nb"],
+      "description": "Initializes project with neo base",
+      "factory": "./base",
+      "schema": "./base/schema.json"
+    },
     "neo-component": {
       "aliases": ["nc"],
       "description": "Creates a Neo Component",
@@ -35,6 +41,10 @@
     "debug": {
       "description": "Debugging input values",
       "factory": "./debug"
+    },
+    "base": {
+      "description": "A blank schematic.",
+      "factory": "./base/index#base"
     }
   }
 }

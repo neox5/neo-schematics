@@ -35,7 +35,13 @@ export default function (options: ComponentOptions): Rule {
 
     const rootPath = await getRootPathFromProject(tree, options.project);
 
-    const { symbolDir, symbolName } = splitSubpath(options.subpath);
+    let { symbolDir, symbolName } = splitSubpath(options.subpath);
+
+    if (options.type == "view") {
+      if (symbolName.indexOf("-view") == -1) {
+        symbolName = symbolName + "-view";
+      }
+    }
 
     const quotes = getQuoteSetting(tree);
     const prefix = await getPrefix(tree, options.project);

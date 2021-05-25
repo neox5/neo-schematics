@@ -63,6 +63,11 @@
         "$source": "projectName"
       }
     },
+    "skipview": {
+      "type": "boolean",
+      "description": "Prohibits the generation of a view component",
+      "default": false
+    },
     "debug": {
       "type": "boolean",
       "description": "Runs debug script for easier problem analysis",
