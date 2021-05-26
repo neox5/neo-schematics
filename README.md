@@ -22,8 +22,19 @@ Angular schematics for a faster and scalable code generation.
 ng new ng-workspace --create-application=false
 cd ng-workspace
 
+# add neo schematics
+#   - this will add @neox/schematics to devDependencies
+#   - adds @neox/schematics as cli/defaultCollection (angular.json)
+#   - sets quotes to double (.editorconfig)
+ng add @neox/schematics
+
 # create new angular/cli project
+ng generate application app-one -t -p=ao
+# or
 ng generate application app-one
+ng generate neo-init --inlinetemplate --prefix=ao
+
+
 
 # add eslint (for more details: https://github.com/angular-eslint/angular-eslint)
 ng add @angular-eslint/schematics

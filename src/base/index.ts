@@ -1,11 +1,12 @@
-import { chain, Rule, schematic } from '@angular-devkit/schematics';
+import { apply, chain, MergeStrategy, mergeWith, move, Rule, schematic, template, Tree, url } from '@angular-devkit/schematics';
 
 import { Schema as AddSchema } from "./schema.interface";
 import { Schema as InitSchema } from "../init/schema.interface";
 import { Schema as ModuleSchema } from "../module/schema.interface";
+import { getPrefix, getRootPathFromProject } from '../utils';
 
 export default function (options: AddSchema): Rule {
-  return () => {
+  return async (tree: Tree) => {
     let rule = chain([]);
     if (options.debug) {
       rule = chain([rule, schematic("debug", options)]);
@@ -15,6 +16,7 @@ export default function (options: AddSchema): Rule {
       pathaliases: true,
       project: options.project
     }
+
     const coreModuleOptions: ModuleSchema = {
       subpath: "core",
       type: "core",
@@ -28,7 +30,7 @@ export default function (options: AddSchema): Rule {
     }
 
     const layoutModuleOptions: ModuleSchema = {
-      subpath: "layouts/app",
+      subpath: "layouts/main",
       type: "layout",
       project: options.project
     }
@@ -39,6 +41,19 @@ export default function (options: AddSchema): Rule {
       project: options.project
     }
 
+    const rootPath = await getRootPathFromProject(tree, options.project);
+    const prefix = await getPrefix(tree, options.project);
+    // add template
+    const sourceTemplates = url("./files");
+    const sourceParametrizedTemplates = apply(sourceTemplates, [
+      template({ prefix }),
+      move(rootPath),
+    ]);
+
+    if (tree.exists("./src/app/app.component.html")) {
+      tree.delete("./src/app/app.component.html");
+    }
+
     return chain([
       rule,
       schematic("neo-init", initOptions),
@@ -46,6 +61,7 @@ export default function (options: AddSchema): Rule {
       schematic("neo-module", sharedModuleOptions),
       schematic("neo-module", layoutModuleOptions),
       schematic("neo-module", routesModuleOptions),
+      mergeWith(sourceParametrizedTemplates, MergeStrategy.Overwrite)
     ])
   };
 }
