@@ -38,13 +38,15 @@
       "factory": "./service",
       "schema": "./service/schema.json"
     },
+    "neo-style": {
+      "aliases": ["nstyle"],
+      "description": "Adds Neo Style folder",
+      "factory": "./style",
+      "schema": "./style/schema.json"
+    },
     "debug": {
       "description": "Debugging input values",
       "factory": "./debug"
-    },
-    "base": {
-      "description": "A blank schematic.",
-      "factory": "./base/index#base"
     }
   }
 }

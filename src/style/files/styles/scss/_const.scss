@@ -1,0 +1,23 @@
+// =============================================================================
+// COLORS
+// =============================================================================
+// font:
+$font-color: #000;
+$font-color-muted: rgba(0, 0, 0, 0.66);
+
+// backgrounds
+$color-bg: #fafafa;
+
+// =============================================================================
+// FONT
+// =============================================================================
+// fontstack 2020: https://medium.com/@masakudamatsu/survey-system-font-stack-5f73a3b39776
+// stylelint-disable-next-line value-keyword-case
+$font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", arial, sans-serif;
+
+// =============================================================================
+// ANIMATION
+// =============================================================================
+$transition-duration: 300ms;
+$ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);

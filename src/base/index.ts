@@ -2,6 +2,7 @@ import { apply, chain, MergeStrategy, mergeWith, move, Rule, schematic, template
 
 import { Schema as AddSchema } from "./schema.interface";
 import { Schema as InitSchema } from "../init/schema.interface";
+import { Schema as StyleSchema} from "../style/schema.interface";
 import { Schema as ModuleSchema } from "../module/schema.interface";
 import { getPrefix, getRootPathFromProject } from '../utils';
 
@@ -14,6 +15,10 @@ export default function (options: AddSchema): Rule {
 
     const initOptions: InitSchema = {
       pathaliases: true,
+      project: options.project
+    }
+
+    const styleOptions: StyleSchema = {
       project: options.project
     }
 
@@ -57,6 +62,7 @@ export default function (options: AddSchema): Rule {
     return chain([
       rule,
       schematic("neo-init", initOptions),
+      schematic("neo-style", styleOptions),
       schematic("neo-module", coreModuleOptions),
       schematic("neo-module", sharedModuleOptions),
       schematic("neo-module", layoutModuleOptions),

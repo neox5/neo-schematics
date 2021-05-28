@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "neo-schematics://style",
+  "title": "Neo Style Options Schema",
+  "type": "object",
+  "description": "Adds Neo Style folder to project",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Generate in specific Angular CLI workspace project"
+    },
+    "debug": {
+      "type": "boolean",
+      "description": "Runs debug script for easier problem analysis",
+      "default": false
+    }
+  }
+}

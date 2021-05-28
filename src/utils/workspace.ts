@@ -37,18 +37,10 @@ export async function getWorkspace(
   return workspace;
 }
 
-export function buildDefaultPath(
+export function buildSrcPathFromProject(
   project: workspaces.ProjectDefinition
 ): string {
-  const root = project.sourceRoot
-    ? `/${project.sourceRoot}/`
-    : `/${project.root}/src/`;
-  const projectDirName =
-    project.extensions["projectType"] === ProjectType.Application
-      ? "app"
-      : "lib";
-
-  return `${root}${projectDirName}`;
+  return project.sourceRoot ? `${project.sourceRoot}/` : `${project.root}/src/`;
 }
 
 export function buildRootPathFromProject(
