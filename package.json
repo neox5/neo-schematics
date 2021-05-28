@@ -1,6 +1,6 @@
 {
   "name": "@neox/schematics",
-  "version": "12.0.19",
+  "version": "12.0.20",
   "description": "Angular schematics for faster and scalable code generation",
   "author": "Christian Faustmann <faustmannchr@gmail.com>",
   "license": "MIT",

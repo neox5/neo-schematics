@@ -49,12 +49,31 @@ export default function (options: ServiceSchema): Rule {
     let indexPath;
     let symbolFilePath;
 
+    if (options.skipimport) {
+      return rule;
+    }
+
     switch (options.type) {
-      case "api":
-        if (options.skipimport) {
-          break;
+      case "":
+        if (!findIndexFromPath(tree, rootPath + symbolDir)) {
+          // if not index.ts file exists create one
+          tree.create(rootPath + symbolDir + "/index.ts", "");
         }
 
+        // add export to index.ts
+        indexPath = rootPath + symbolDir + "/index.ts";
+        symbolFilePath = `./${strings.dasherize(
+          symbolName
+        )}/${strings.dasherize(symbolName)}.service`;
+
+        rule = chain([
+          rule,
+          addExportToIndex(indexPath, symbolFilePath),
+          runPrettier(indexPath),
+        ]);
+        break;
+      case "api":
+        
         if (!findIndexFromPath(tree, rootPath + symbolDir)) {
           // if not index.ts file exists create one
           tree.create(rootPath + symbolDir + "/index.ts", "");
@@ -74,9 +93,6 @@ export default function (options: ServiceSchema): Rule {
 
         break;
       case "sandbox":
-        if (options.skiputil) {
-          break;
-        }
         // create utility service for sandbox
         const utilServiceOptions: ServiceSchema = {
           subpath: symbolDir + "/util/" + symbolName,
@@ -88,10 +104,6 @@ export default function (options: ServiceSchema): Rule {
 
         break;
       case "util":
-        if (options.skipimport) {
-          break;
-        }
-
         if (!findIndexFromPath(tree, rootPath + symbolDir)) {
           // if not index.ts file exists create one
           tree.create(rootPath + symbolDir + "/index.ts", "");
