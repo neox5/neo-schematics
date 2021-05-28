@@ -96,7 +96,7 @@ export default function (options: InitOptions): Rule {
         angularJson["projects"][projectName]["architect"]["build"]["options"] = {
           ...opt,
           stylePreprocessorOptions: {
-            includePaths: ["src/styles/scss"],
+            includePaths: [project.sourceRoot + "/styles/scss"],
           },
         };
         tree.overwrite("angular.json", JSON.stringify(angularJson, null, 2));

@@ -55,8 +55,8 @@ export default function (options: AddSchema): Rule {
       move(rootPath),
     ]);
 
-    if (tree.exists("./src/app/app.component.html")) {
-      tree.delete("./src/app/app.component.html");
+    if (tree.exists(rootPath + "app.component.html")) {
+      tree.delete(rootPath + "app.component.html");
     }
 
     return chain([

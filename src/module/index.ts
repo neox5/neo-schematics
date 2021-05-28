@@ -106,7 +106,7 @@ function getTemplateUrl(type?: ModuleType): string {
 }
 
 function layoutViewComponentTemplate(prefix: string): string {
-  return `<${prefix}-navigation></${prefix}-navigation>\n\t\t<router-outlet></router-outlet>`;
+  return `<${prefix}-main-navigation></${prefix}-main-navigation>\n\t\t<router-outlet></router-outlet>`;
 }
 
 function addModuleImport(path: string, moduleSymbol: string): Rule {
