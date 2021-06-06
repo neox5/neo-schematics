@@ -73,7 +73,6 @@ export default function (options: ServiceSchema): Rule {
         ]);
         break;
       case "api":
-        
         if (!findIndexFromPath(tree, rootPath + symbolDir)) {
           // if not index.ts file exists create one
           tree.create(rootPath + symbolDir + "/index.ts", "");
@@ -120,7 +119,7 @@ export default function (options: ServiceSchema): Rule {
 
         const sandboxPath = join(
           (rootPath + symbolDir) as Path,
-          "../home-sandbox.service.ts"
+          `../${strings.dasherize(symbolName)}-sandbox.service.ts`
         );
 
         rule = chain([
