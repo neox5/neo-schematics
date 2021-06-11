@@ -55,7 +55,14 @@ export function appendIndexExportArray(
     const pos = tsquery(sourceFile, "ArrayLiteralExpression")[0].getEnd();
 
     if (identifierCount !== 0) {
-      symbolName = ", " + symbolName;
+      // check if the last element ends with a semicolon.
+      // this is the case when the array is previously formated and all the
+      // elements are one below the other.
+      let elementString = tsquery(sourceFile, "ArrayLiteralExpression")[0].getText()
+      elementString = elementString.replace("[", "").replace("]", "").trim();
+      const hasSeparator = elementString.slice(-1) === ","
+      const separator = hasSeparator ? "" : ", ";
+      symbolName =  separator + symbolName;
     }
 
     const recorder = tree.beginUpdate(indexPath);

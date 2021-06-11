@@ -23,6 +23,7 @@ import {
   getPrefix,
   getQuoteSetting,
   getRootPathFromProject,
+  runPrettier,
   splitSubpath,
 } from "../utils";
 
@@ -78,6 +79,7 @@ export default function (options: ComponentOptions): Rule {
       options.type == "view"
         ? addExportToIndex(indexPath, componentFilePath)
         : noop(),
+      runPrettier(indexPath),
     ]);
   };
 }
