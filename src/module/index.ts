@@ -67,7 +67,7 @@ export default function (options: ModuleSchema): Rule {
         const layoutViewComponentOptions: ComponentSchema = {
           subpath: `${symbolDir}/${symbolName}-layout/views/${symbolName}-layout-view`,
           type: "view",
-          template: layoutViewComponentTemplate(prefix),
+          template: layoutViewComponentTemplate(prefix, symbolName),
           destroyable: false,
           project: options.project,
         };
@@ -105,8 +105,8 @@ function getTemplateUrl(type?: ModuleType): string {
   }
 }
 
-function layoutViewComponentTemplate(prefix: string): string {
-  return `<${prefix}-main-navigation></${prefix}-main-navigation>\n\t\t<router-outlet></router-outlet>`;
+function layoutViewComponentTemplate(prefix: string, symbolName: string): string {
+  return `<${prefix}-${symbolName}-navigation></${prefix}-${symbolName}-navigation>\n\t\t<router-outlet></router-outlet>`;
 }
 
 function addModuleImport(path: string, moduleSymbol: string): Rule {
