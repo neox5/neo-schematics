@@ -6,7 +6,7 @@ import { views } from "./views";
 import { containers } from "./containers";
 import { components } from "./components";
 <% if(withsubrouting) { %>
-export const ROUTES: Routes = [
+export const SUBROUTES: Routes = [
   {
     path: "",
     pathMatch: "prefix",
@@ -17,7 +17,7 @@ export const ROUTES: Routes = [
 @NgModule({
   declarations: [...views, ...containers, ...components],
   imports: [
-    <% if(withsubrouting) { %>RouterModule.forChild(ROUTES, { enableTracing: false }),<% } %> 
+    <% if(withsubrouting) { %>RouterModule.forChild(SUBROUTES),<% } %> 
     SharedModule
   ],
 })
