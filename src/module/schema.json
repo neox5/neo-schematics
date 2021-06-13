@@ -68,6 +68,11 @@
       "description": "Prohibits the generation of a view component",
       "default": false
     },
+    "withrouting": {
+      "type": "boolean",
+      "description": "Adds routing to module",
+      "default": false
+    },
     "debug": {
       "type": "boolean",
       "description": "Runs debug script for easier problem analysis",

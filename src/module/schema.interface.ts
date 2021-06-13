@@ -5,5 +5,6 @@ export interface Schema {
   type?: ModuleType;
   project?: string;
   skipview?: boolean;
+  withrouting?: boolean;
   debug?: boolean;
 }
