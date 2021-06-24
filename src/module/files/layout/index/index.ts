@@ -1,1 +1,1 @@
-export const layouts: any[] = [];
+export const layoutModules: any[] = [];
