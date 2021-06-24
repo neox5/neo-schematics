@@ -34,7 +34,7 @@ ng generate application app-one -t -p=ao
 ng generate application app-one
 ng generate neo-init --inlinetemplate --prefix=ao
 
-
+ng generate neo-base
 
 # add eslint (for more details: https://github.com/angular-eslint/angular-eslint)
 ng add @angular-eslint/schematics

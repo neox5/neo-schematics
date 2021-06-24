@@ -21,3 +21,35 @@ $font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 // =============================================================================
 $transition-duration: 300ms;
 $ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+
+// =============================================================================
+// RESPONSIVE
+// =============================================================================
+$breakpoints: (
+  na: 0px,
+  // For BS grid
+  xs: 320px,
+  // Smartphone
+  sm: 600px,
+  // Tablets
+  md: 900px,
+  // Tablets Landscape and small desktops
+  lg: 1200px,
+  // Desktops
+  xl: 1800px,
+  // Large Desktop
+);
+$media-breakpoints: (
+  na: "(min-width: 0px)",
+  // For BS grid
+  xs: "(min-width: 320px)",
+  // Smartphone
+  sm: "(min-width: 600px)",
+  // Tablets
+  md: "(min-width: 900px)",
+  // Tablets Landscape and small desktops
+  lg: "(min-width: 1200px)",
+  // Desktops
+  xl: "(min-width: 1800px)",
+  // Large Desktop
+);
