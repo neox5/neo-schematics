@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
-export const ROUTES: Routes = [
+export const <% if(forroot) { %>ROUTES<% } else%>SUBROUTES<% } %>: Routes = [
   {
     path: "",
     pathMatch: "prefix",
@@ -12,7 +12,7 @@ export const ROUTES: Routes = [
 @NgModule({
   declarations: [],
   imports: [
-    RouterModule.forRoot(ROUTES, { enableTracing: false })
+    <% if(forroot) { %>RouterModule.forRoot(ROUTES, { enableTracing: false })<% } else%>RouterModule.forChild(SUBROUTES)<% } %>
   ],
   exports: [RouterModule],
 })

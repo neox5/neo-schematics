@@ -6,5 +6,6 @@ export interface Schema {
   project?: string;
   skipview?: boolean;
   withsubrouting?: boolean;
+  forroot?: boolean;
   debug?: boolean;
 }

@@ -73,6 +73,11 @@
       "description": "Adds subrouting to module",
       "default": false
     },
+    "forroot": {
+      "type": "boolean",
+      "description": "Routing module is root",
+      "default": false
+    },
     "debug": {
       "type": "boolean",
       "description": "Runs debug script for easier problem analysis",

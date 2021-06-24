@@ -43,6 +43,7 @@ export default function (options: AddSchema): Rule {
     const routesModuleOptions: ModuleSchema = {
       subpath: "routes/app",
       type: "routing",
+      forroot: true,
       project: options.project
     }
 

@@ -36,6 +36,10 @@ ng generate neo-init --inlinetemplate --prefix=ao
 
 ng generate neo-base
 
+ng generate neo-module routes/main/main routing
+
+ng generate neo-module routes/main/layouts/main layout
+
 # add eslint (for more details: https://github.com/angular-eslint/angular-eslint)
 ng add @angular-eslint/schematics
 
